@@ -1,0 +1,8 @@
+# Uso interno: não vai para o site público
+*.md
+!README.md
+dev.html
+estudio.html
+assets/js/estudio.js
+criativos-exemplo/
+.claude/

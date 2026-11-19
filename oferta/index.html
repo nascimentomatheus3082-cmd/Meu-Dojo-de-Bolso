@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dojô de Bolso | Seu pedido</title>
+<meta name="theme-color" content="#1E2647">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/funil.css">
+<link rel="stylesheet" href="../assets/css/oferta.css">
+<link rel="icon" href="../assets/icon.svg">
+</head>
+<body>
+<header class="topo">
+  <div class="wrap topo-in">
+    <a class="logo" href="../"><svg viewBox="0 0 32 32" class="logo-ic" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1E2647"/><rect x="4" y="14" width="24" height="5" rx="1" fill="#D0312D"/><rect x="13" y="11" width="6" height="11" rx="1" transform="rotate(45 16 16.5)" fill="#D0312D"/></svg>Dojô de Bolso</a>
+    <span class="seguro"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M6 10V8a6 6 0 0112 0v2h1v11H5V10zm2 0h8V8a4 4 0 00-8 0z" fill="currentColor"/></svg>Compra segura</span>
+  </div>
+</header>
+
+<main class="wrap pedido">
+  <p class="passo">Etapa 1 de 2 · revise o seu pedido</p>
+  <h1 id="titulo">Seu pedido</h1>
+
+  <section class="item-plano" id="itemPlano"></section>
+
+  <section id="bumps" class="bumps"></section>
+
+  <section class="resumo" aria-live="polite">
+    <div class="linhas" id="linhas"></div>
+    <div class="total"><span>Total</span><b id="total"></b></div>
+    <a class="btn" id="pagar" href="#">Ir para o pagamento</a>
+    <p class="formas">Pagamento por Pix. O Pix é confirmado em segundos e o acesso chega no seu e-mail logo em seguida.</p>
+  </section>
+
+  <div class="garantia">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z" fill="#E8EBF4" stroke="#1E2647" stroke-width="2.5"/><path d="M17 24l5 5 10-11" fill="none" stroke="#2E8B4E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <p><b><span data-garantia></span> dias de garantia.</b> Se não gostar, peça o reembolso dentro do prazo e recebe 100% de volta.</p>
+  </div>
+
+  <p class="trocar"><a href="#" id="trocar">Trocar de plano</a></p>
+</main>
+
+<footer class="rodape wrap">
+  <p>Dojô de Bolso é um material de estudo independente. Não tem vínculo com a CBJ, a IJF ou o Kodokan.</p>
+</footer>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/anim.js"></script>
+<script src="../assets/js/oferta.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dojô de Bolso | Compra concluída</title>
+<meta name="theme-color" content="#1E2647">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/funil.css">
+<link rel="stylesheet" href="../assets/css/oferta.css">
+<link rel="icon" href="../assets/icon.svg">
+</head>
+<body>
+<header class="topo">
+  <div class="wrap topo-in">
+    <span class="logo"><svg viewBox="0 0 32 32" class="logo-ic" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1E2647"/><rect x="4" y="14" width="24" height="5" rx="1" fill="#D0312D"/><rect x="13" y="11" width="6" height="11" rx="1" transform="rotate(45 16 16.5)" fill="#D0312D"/></svg>Dojô de Bolso</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="ok-cab">
+    <div class="ok-selo" aria-hidden="true">✓</div>
+    <h1 id="okTitulo">Compra concluída. Bem-vindo ao dojô!</h1>
+    <p id="okTexto">O acesso também foi para o seu e-mail. Se não chegar em 10 minutos, olhe a caixa de spam.</p>
+  </section>
+
+  <section class="acesso">
+    <h2 id="acessoTit">Seu acesso</h2>
+    <p id="acessoTxt"></p>
+    <a class="btn" id="abrirApp" href="../app/">Abrir o app agora</a>
+  </section>
+
+  <ol class="passos-ok">
+    <li><span><b>Salve o app na tela do celular</b>No iPhone: botão de compartilhar e "Adicionar à Tela de Início". No Android: menu ⋮ e "Adicionar à tela inicial". Ele abre como um aplicativo.</span></li>
+    <li><span><b>Cadastre o judoca</b>Nome e faixa do próximo exame. O progresso fica salvo em nome dele.</span></li>
+    <li><span><b>Assista à primeira aula com o som ligado</b>Uma técnica por dia já dá conta do programa até o exame.</span></li>
+  </ol>
+
+  <section class="upsell" id="upsell" hidden>
+    <span class="u-tag">Só nesta página</span>
+    <h2>Passe para o Anual e leve tudo junto</h2>
+    <p>Como você acabou de comprar, o upgrade sai pela diferença:</p>
+    <ul>
+      <li>Plano Família: até 3 judocas no mesmo acesso</li>
+      <li>Fichas para imprimir de todas as técnicas</li>
+      <li>Os módulos novos que lançarmos nos 12 meses</li>
+    </ul>
+    <p class="u-preco">+ R$ <span data-preco="upgradeAnual"></span></p>
+    <a class="btn" id="upsellSim" href="#">Sim, quero o upgrade</a>
+    <button class="nao" id="upsellNao">Não, obrigado. Vou ficar com o meu plano.</button>
+  </section>
+
+  <section class="indique">
+    <h2>Tem um parceiro de treino com exame marcado?</h2>
+    <p>Mande o teste grátis para ele. Leva 1 minuto e mostra o plano da faixa dele.</p>
+    <a class="btn dark" id="indicar" href="#">Enviar pelo WhatsApp</a>
+  </section>
+
+  <p class="trocar" id="suporte"></p>
+</main>
+
+<footer class="rodape wrap"><p>Dojô de Bolso · Garantia de <span data-garantia></span> dias.</p></footer>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/fx.js"></script>
+<script>
+/* A plataforma de pagamento redireciona para cá com os parâmetros do que foi comprado:
+   /obrigado/?plano=completo&familia=1&fichas=1&faixa=amarela  (ou ?plano=anual) */
+(function () {
+  const q = new URLSearchParams(location.search);
+  const plano = ['essencial', 'completo', 'anual'].includes(q.get('plano')) ? q.get('plano') : 'completo';
+  const faixa = FAIXAS.find(f => f.id === q.get('faixa'));
+  const params = new URLSearchParams({ plano });
+  if (faixa) params.set('faixa', faixa.id);
+  ['familia', 'fichas'].forEach(k => { if (q.get(k) === '1') params.set(k, '1'); });
+  document.getElementById('abrirApp').href = '../app/?' + params.toString();
+  const nomes = { essencial: 'Essencial' + (faixa ? ' · faixa ' + faixa.nome.toLowerCase() : ''), completo: 'Completo · todas as faixas', anual: 'Anual · tudo incluso' };
+  const extras = [];
+  if (plano === 'anual' || q.get('familia') === '1') extras.push('Plano Família (3 judocas)');
+  if (plano === 'anual' || q.get('fichas') === '1') extras.push('fichas para imprimir');
+  document.getElementById('acessoTit').textContent = 'Plano ' + nomes[plano];
+  document.getElementById('acessoTxt').textContent = extras.length ? 'Inclui ' + extras.join(' e ') + '. Toque no botão para entrar.' : 'Toque no botão para entrar. Guarde este link ou o e-mail de acesso.';
+  document.querySelectorAll('[data-preco]').forEach(e => e.textContent = CONFIG.precos[e.dataset.preco]);
+  document.querySelectorAll('[data-garantia]').forEach(e => e.textContent = CONFIG.garantiaDias);
+
+  // Upsell: só para quem não comprou o Anual
+  if (plano !== 'anual' && linkCheckout('upgrade-anual')) {
+    const up = document.getElementById('upsell'); up.hidden = false;
+    document.getElementById('upsellSim').href = comUtm(linkCheckout('upgrade-anual'), { de: plano });
+    document.getElementById('upsellSim').onclick = () => track('InitiateCheckout', { content_name: 'upgrade-anual', value: parseFloat(CONFIG.precos.upgradeAnual.replace(',', '.')), currency: 'BRL' });
+    document.getElementById('upsellNao').onclick = () => { up.hidden = true; track('UpsellRecusado', { de: plano }, true); };
+  }
+
+  // Indicação
+  const linkTeste = new URL('../', location.href); linkTeste.searchParams.set('utm_source', 'indicacao'); linkTeste.searchParams.set('utm_medium', 'whatsapp');
+  const msg = `Fiz um teste que monta o plano de estudo do exame de faixa de judô, com os golpes animados. Faz o seu: ${linkTeste}`;
+  document.getElementById('indicar').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('indicar').onclick = () => track('Indicacao', {}, true);
+
+  if (CONFIG.suporteWhatsapp) document.getElementById('suporte').innerHTML = `Dúvida com o acesso? <a href="https://wa.me/${CONFIG.suporteWhatsapp}">Fale com o suporte no WhatsApp</a>`;
+
+  // O evento Purchase é enviado pelo Pixel da plataforma de pagamento (evita contar a venda duas vezes).
+  track('ObrigadoVisto', { plano, familia: q.get('familia') === '1', fichas: q.get('fichas') === '1' }, true);
+  setTimeout(() => { FX.confete(120); FX.som('conquista'); }, 350);
+})();
+</script>
+</body>
+</html>

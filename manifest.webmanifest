@@ -1,0 +1,12 @@
+{
+  "name": "Dojô de Bolso",
+  "short_name": "Dojô",
+  "start_url": "app/",
+  "display": "standalone",
+  "background_color": "#F4F5F2",
+  "theme_color": "#1E2647",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dojô de Bolso | Plano para o exame de faixa de judô</title>
+<meta name="description" content="Responda 7 perguntas e receba o plano de estudo para o seu exame de faixa de judô, com cada golpe animado e narrado.">
+<meta name="theme-color" content="#1E2647">
+<meta property="og:title" content="Dojô de Bolso: passe no exame de faixa de judô">
+<meta property="og:description" content="Cada golpe do exame animado, narrado e com simulado. Faça o quiz e veja o seu plano.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/funil.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231E2647'/%3E%3Crect x='4' y='14' width='24' height='5' rx='1' fill='%23D0312D'/%3E%3Crect x='13' y='11' width='6' height='11' rx='1' transform='rotate(45 16 16.5)' fill='%23D0312D'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="topo">
+  <div class="wrap topo-in">
+    <span class="logo"><svg viewBox="0 0 32 32" class="logo-ic" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1E2647"/><rect x="4" y="14" width="24" height="5" rx="1" fill="#D0312D"/><rect x="13" y="11" width="6" height="11" rx="1" transform="rotate(45 16 16.5)" fill="#D0312D"/></svg>Dojô de Bolso</span>
+    <div class="obi" id="obi" aria-hidden="true"><div class="obi-fill"></div><div class="obi-knot"></div></div>
+  </div>
+</header>
+
+<main id="app" class="wrap">
+
+  <!-- Tela inicial -->
+  <section class="tela ativa" data-tela="inicio">
+    <div class="hero-stage stage" id="heroStage"></div>
+    <h1 class="hero-h">O exame de faixa, golpe por golpe, animado e narrado.</h1>
+    <p class="hero-p">Responda 7 perguntas rápidas e receba o plano de estudo da sua faixa, com a ordem certa das técnicas até o dia do exame.</p>
+    <button class="btn" data-go="quem">Fazer o quiz grátis</button>
+    <p class="hero-nota">Leva 1 minuto. Não pede e-mail.</p>
+    <ul class="hero-fatos">
+      <li><b>70</b> técnicas do programa, da faixa azul à marrom</li>
+      <li><b>Narração</b> em português em cada golpe</li>
+      <li><b>Simulados</b> com gabarito comentado</li>
+    </ul>
+  </section>
+
+  <!-- Perguntas: montadas pelo funil.js -->
+  <section class="tela" data-tela="pergunta"><div id="pergunta"></div></section>
+
+  <!-- Desafio -->
+  <section class="tela" data-tela="desafio">
+    <p class="passo" id="desafioPasso"></p>
+    <h2 id="desafioTitulo">Sabe qual é este golpe?</h2>
+    <div class="stage desafio-stage" id="desafioStage"></div>
+    <div class="opcoes" id="desafioOpcoes"></div>
+    <div class="desafio-fb" id="desafioFb" hidden></div>
+  </section>
+
+  <!-- Nome -->
+  <section class="tela" data-tela="nome">
+    <p class="passo">Última pergunta</p>
+    <h2 id="nomeTitulo">Qual o nome do judoca?</h2>
+    <p class="muted">Usamos só para montar o plano na tela. Não salvamos em lugar nenhum.</p>
+    <label class="campo"><span class="sr">Nome</span><input id="nomeInput" type="text" autocomplete="given-name" maxlength="24" placeholder="Primeiro nome"></label>
+    <button class="btn" id="nomeOk">Ver meu plano</button>
+    <button class="pular" id="nomePular">Pular</button>
+  </section>
+
+  <!-- Montando o plano -->
+  <section class="tela" data-tela="montando">
+    <div class="montando">
+      <h2 id="montandoTitulo">Montando o plano…</h2>
+      <ul id="montandoLista" class="montando-lista"></ul>
+    </div>
+  </section>
+
+  <!-- Resultado + oferta -->
+  <section class="tela" data-tela="resultado">
+    <div class="res-cab" id="resCab"></div>
+
+    <div class="plano" id="plano"></div>
+
+    <div class="bloco">
+      <h2>Escute uma aula agora</h2>
+      <p class="muted">É assim que cada técnica aparece no app: o golpe se mexe, a narração explica e a legenda acompanha. Aperte o play com o som ligado.</p>
+      <div class="aula" id="amostra">
+        <div class="stage"></div>
+        <div class="fases" id="amostraFases"></div>
+        <div class="caption" aria-live="polite"></div>
+        <div class="controles">
+          <button class="play" id="amostraPlay"><svg class="ic" viewBox="0 0 24 24"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>Ouvir a aula</span></button>
+          <button id="amostraLento" aria-pressed="false">Câmera lenta</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bloco dor" id="dor"></div>
+
+    <div class="bloco">
+      <h2>O que vem no app</h2>
+      <ul class="lista-app">
+        <li><b>Aula animada de cada técnica.</b> Golpe em movimento com as fases kuzushi, tsukuri e kake marcadas, narração e o erro que reprova.</li>
+        <li><b>Câmera lenta e modo canhoto.</b> Veja devagar e espelhado, do jeito que você treina.</li>
+        <li><b>Simulados por faixa com gabarito.</b> Nome, tradução, grupo, erro comum, história, regras e etiqueta, com explicação em cada resposta.</li>
+        <li><b>Modo banca.</b> O app sorteia um golpe e fala o nome, como o sensei faz no exame. Você mostra; depois confere.</li>
+        <li><b>Glossário falado.</b> Os termos japoneses do exame com a pronúncia.</li>
+        <li><b>Plano de estudo diário.</b> O app marca o que você já revisou e o que falta até o dia do exame.</li>
+      </ul>
+    </div>
+
+    <div class="bloco oferta" id="oferta">
+      <h2>Escolha o seu acesso</h2>
+      <p class="muted">Funciona no celular, no tablet e no computador.</p>
+      <div class="planos">
+        <article class="cartao-plano anual">
+          <p class="selo">Tudo incluso</p>
+          <h3>Anual</h3>
+          <p class="preco"><small>R$</small><span data-preco="anual"></span><small class="por">/ano</small></p>
+          <p class="preco-mes">Dá R$ <span data-preco="anualMes"></span> por mês</p>
+          <ul>
+            <li>Tudo do Completo, em todas as faixas</li>
+            <li>Plano Família: até 3 judocas no mesmo acesso</li>
+            <li>Fichas para imprimir de todas as técnicas</li>
+            <li>Os módulos novos que lançarmos nos 12 meses (o próximo é sequências e contra-ataques)</li>
+            <li>Pix único, sem renovação automática</li>
+          </ul>
+          <a class="btn dark" data-plano="anual" href="#">Quero o Anual</a>
+        </article>
+        <article class="cartao-plano destaque">
+          <p class="selo">Pagamento único</p>
+          <h3>Completo</h3>
+          <p class="preco"><small>R$</small><span data-preco="completo"></span></p>
+          <ul>
+            <li>Todas as faixas: azul, amarela, laranja, verde, roxa e marrom</li>
+            <li>70 aulas animadas e narradas</li>
+            <li>Simulados ilimitados de todas as faixas</li>
+            <li>Modo banca e glossário falado</li>
+            <li>Acesso sem prazo para acabar</li>
+          </ul>
+          <a class="btn" data-plano="completo" href="#">Quero o Completo</a>
+        </article>
+        <article class="cartao-plano">
+          <h3>Essencial</h3>
+          <p class="preco"><small>R$</small><span data-preco="essencial"></span></p>
+          <ul>
+            <li>Só a faixa <b data-faixa-nome></b></li>
+            <li>Aulas animadas e narradas dessa faixa</li>
+            <li>Simulado dessa faixa</li>
+          </ul>
+          <a class="btn ghost" data-plano="essencial" href="#">Quero só a minha faixa</a>
+        </article>
+      </div>
+      <div class="garantia">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z" fill="#E8EBF4" stroke="#1E2647" stroke-width="2.5"/><path d="M17 24l5 5 10-11" fill="none" stroke="#2E8B4E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p><b><span data-garantia></span> dias de garantia.</b> Se não gostar, peça o reembolso dentro do prazo e recebe 100% de volta, sem perguntas.</p>
+      </div>
+    </div>
+
+    <div class="bloco faq">
+      <h2>Dúvidas</h2>
+      <details><summary>Substitui o treino com o sensei?</summary><p>Não. O app é para revisar em casa o que você treina no tatame: nomes, fases do golpe, teoria e etiqueta. A execução continua sendo treinada com o seu professor.</p></details>
+      <details><summary>O exame da minha academia é diferente. Ainda serve?</summary><p>O conteúdo segue o Gokyo do Kodokan, organizado por faixa no formato usado pela CBJ. Algumas federações e academias pedem algo a mais. Confirme com o seu sensei e use o app para o que for cobrado.</p></details>
+      <details><summary>Serve para criança?</summary><p>Sim. As animações e a narração foram pensadas para crianças a partir de uns 7 anos estudarem junto com os pais.</p></details>
+      <details><summary>Como recebo o acesso?</summary><p>Logo depois do pagamento chega um e-mail com o link do app. Você abre no navegador e pode salvar na tela inicial do celular.</p></details>
+      <details><summary>Preciso saber japonês?</summary><p>Não. Cada nome vem com a tradução e a pronúncia falada.</p></details>
+      <details><summary>Quais as formas de pagamento?</summary><p>Somente Pix. O pagamento é confirmado na hora e o acesso chega no seu e-mail logo em seguida.</p></details>
+    </div>
+
+    <div class="bloco fim">
+      <button class="btn" id="irOferta">Liberar o plano completo</button>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape wrap">
+  <p>Dojô de Bolso é um material de estudo independente. Não tem vínculo com a CBJ, a IJF ou o Kodokan. Os resultados dependem do treino de cada judoca.</p>
+  <p><a href="app/">Área do aluno</a></p>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/anim.js"></script>
+<script src="assets/js/funil.js"></script>
+</body>
+</html>

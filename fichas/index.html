@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dojô de Bolso | Fichas para imprimir</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="icon" href="../assets/icon.svg">
+<style>
+  body { background: #E9EBF0; }
+  .barra-f { position: sticky; top: 0; z-index: 3; background: var(--ai); color: #fff; }
+  .barra-f .wrap { max-width: 860px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; min-height: 60px; padding-top: 8px; padding-bottom: 8px; }
+  .barra-f h1 { font-size: 18px; flex: 1; min-width: 160px; }
+  .barra-f select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 0; }
+  .barra-f .btn { width: auto; min-height: 42px; font-size: 15px; padding: 8px 16px; }
+  .barra-f a { color: #fff; font-size: 14px; }
+  .folhas { max-width: 860px; margin: 18px auto 40px; padding: 0 16px; display: grid; gap: 18px; }
+  .ficha { background: #fff; border-radius: 12px; padding: 28px 30px; box-shadow: 0 10px 30px -20px rgba(30,38,71,.5); }
+  .f-cab { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; border-bottom: 6px solid var(--fc); padding-bottom: 12px; }
+  .f-cab h2 { color: var(--ai); font-size: 34px; }
+  .f-cab .tr { font-size: 18px; }
+  .f-cab .meta { font-size: 13px; color: var(--cinza); text-align: right; }
+  .f-cab .obi-f { display: inline-block; width: 70px; height: 14px; border-radius: 3px; background: var(--fc); margin-top: 6px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+  .quadros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
+  .quadro { border: 1.5px solid var(--linha); border-radius: 10px; overflow: hidden; }
+  .quadro .stage { border-radius: 0; }
+  .quadro b { display: block; padding: 6px 10px; font-size: 14px; color: var(--ai); background: #F1F3F7; }
+  .quadro p { padding: 8px 10px 10px; font-size: 13.5px; line-height: 1.4; }
+  .f-erro { border: 2px solid var(--hinomaru); border-radius: 10px; padding: 10px 14px; font-size: 14.5px; }
+  .f-erro b { color: var(--hinomaru-2); }
+  .f-rodape { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; font-size: 13px; color: var(--cinza); }
+  .chk { display: flex; gap: 14px; flex-wrap: wrap; }
+  .chk span::before { content: ''; display: inline-block; width: 14px; height: 14px; border: 1.5px solid var(--sumi); border-radius: 3px; margin-right: 6px; vertical-align: -2px; }
+  .bloqueio { max-width: 520px; margin: 60px auto; background: #fff; border-radius: 16px; padding: 24px; text-align: center; }
+  .bloqueio h2 { color: var(--ai); margin-bottom: 10px; }
+  @media (max-width: 640px) { .quadros { grid-template-columns: 1fr; } .ficha { padding: 20px 16px; } .f-cab h2 { font-size: 28px; } }
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    body { background: #fff; }
+    .barra-f { display: none; }
+    .folhas { margin: 0; padding: 0; max-width: none; gap: 0; }
+    .ficha { box-shadow: none; border-radius: 0; padding: 0; page-break-after: always; break-after: page; }
+    .quadros { grid-template-columns: repeat(3, 1fr) !important; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="barra-f">
+  <div class="wrap">
+    <h1>Fichas para imprimir</h1>
+    <label><span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden">Faixa</span><select id="faixa"></select></label>
+    <button class="btn" id="imprimir">Imprimir ou salvar PDF</button>
+    <a href="../app/">Voltar ao app</a>
+  </div>
+</div>
+<main class="folhas" id="folhas"></main>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/anim.js"></script>
+<script>
+(function () {
+  try { if (new URLSearchParams(location.search).get('fichas') === '1') localStorage.setItem('dojo_fichas', 'true'); } catch (e) {}
+  const get = (k, d) => { try { const v = localStorage.getItem('dojo_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
+  const liberado = get('fichas', false) || get('plano', '') === 'anual';
+  if (!liberado) {
+    document.querySelector('.barra-f').hidden = true;
+    document.getElementById('folhas').outerHTML = `<div class="bloqueio"><h2>Fichas para imprimir</h2><p>As fichas fazem parte do adicional "Fichas para imprimir" e do plano Anual. Se você comprou, abra o app pelo link do e-mail de acesso para liberar.</p><p style="margin-top:14px"><a class="btn dark" href="../app/">Voltar ao app</a></p></div>`;
+    return;
+  }
+  const sel = document.getElementById('faixa');
+  const perfil = get('perfilAtual', 'p1');
+  const faixaIni = get(`p_${perfil}_faixa`, 'azul');
+  sel.innerHTML = FAIXAS.map(f => `<option value="${f.id}" ${f.id === faixaIni ? 'selected' : ''}>Faixa ${f.nome}</option>`).join('') + '<option value="todas">Todas as faixas</option>';
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function montar() {
+    const lista = sel.value === 'todas' ? TECNICAS : tecnicasDa(sel.value);
+    const box = document.getElementById('folhas');
+    box.innerHTML = lista.map(t => {
+      const f = FAIXAS.find(x => x.id === t.f), G = GRUPOS[t.g];
+      return `<article class="ficha" style="--fc:${f.cor}" data-id="${t.id}">
+        <header class="f-cab"><div><h2>${esc(t.n)}</h2><p class="tr">${esc(t.tr)}</p></div>
+          <div class="meta">${G.nome}<br>${G.desc}<br><span class="obi-f"></span><br>Faixa ${f.nome.toLowerCase()} · ${f.kyu}</div></header>
+        <div class="quadros">${G.fases.map((fa, k) => `<div class="quadro"><b>${k + 1}. ${fa}</b><div class="stage" data-s="${k + 1}"></div><p>${esc(t.p[k])}</p></div>`).join('')}</div>
+        <p class="f-erro"><b>Erro que reprova:</b> ${esc(t.e)}</p>
+        <footer class="f-rodape"><span class="chk"><span>Sei o nome</span><span>Sai limpo para a direita</span><span>Sai limpo para a esquerda</span></span><span>Dojô de Bolso</span></footer>
+      </article>`;
+    }).join('');
+    box.querySelectorAll('.ficha').forEach(fi => {
+      const t = TECNICAS.find(x => x.id === fi.dataset.id), cor = FAIXAS.find(x => x.id === t.f).cor;
+      fi.querySelectorAll('.stage').forEach(el => {
+        const st = new JudoStage(el, { spec: t.a, belt: cor });
+        const s = +el.dataset.s, fr = st.frames.filter(x => x.s === s);
+        const alvo = s === 3 ? fr[Math.min(1, fr.length - 1)] : fr[fr.length - 1];
+        if (alvo) { st.cur = { T: alvo.T, U: alvo.U, arrow: s === 1 && alvo.arrow ? { dir: alvo.arrow, o: 1 } : null }; st.render(); }
+      });
+    });
+  }
+  sel.onchange = montar;
+  document.getElementById('imprimir').onclick = () => window.print();
+  montar();
+})();
+</script>
+</body>
+</html>

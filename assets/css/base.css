@@ -1,0 +1,125 @@
+/* Dojô de Bolso — tokens
+   ai (índigo do judogi azul), algodão (judogi branco), tatame, hinomaru (vermelho do CTA), sumi (tinta). */
+:root {
+  --ai: #1E2647;
+  --ai-2: #2C3766;
+  --algodao: #F4F5F2;
+  --papel: #FFFFFF;
+  --tatami: #DCCB8E;
+  --tatami-line: rgba(90, 70, 20, .22);
+  --tatami-edge: rgba(90, 70, 20, .45);
+  --hinomaru: #D0312D;
+  --hinomaru-2: #A82420;
+  --sumi: #191C2B;
+  --cinza: #5D6276;
+  --linha: #DADDE5;
+  --ok: #2E8B4E;
+  --faixa: #1F5FBF;
+  --faixa-tinta: #fff;
+  --r-s: 6px;
+  --r-m: 14px;
+  --r-l: 22px;
+  --display: 'Dela Gothic One', 'Arial Black', sans-serif;
+  --body: 'Zen Kaku Gothic New', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--algodao); color: var(--sumi);
+  font-family: var(--body); font-size: 17px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width: 100%; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--hinomaru); outline-offset: 2px; border-radius: 4px; }
+a { color: inherit; }
+
+.wrap { width: 100%; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; letter-spacing: -.005em; margin: 0; }
+h1 { font-size: clamp(30px, 8.4vw, 40px); }
+h2 { font-size: clamp(24px, 6.6vw, 30px); }
+h3 { font-size: 20px; }
+p { margin: 0; }
+.muted { color: var(--cinza); }
+.small { font-size: 14px; }
+
+/* ── Botões */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 58px; padding: 14px 20px;
+  border: 0; border-radius: var(--r-m);
+  background: var(--hinomaru); color: #fff;
+  font-family: var(--body); font-weight: 900; font-size: 18px; text-decoration: none; text-align: center;
+  box-shadow: 0 4px 0 var(--hinomaru-2);
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--hinomaru-2); }
+.btn.ghost { background: transparent; color: var(--ai); box-shadow: inset 0 0 0 2px var(--ai); }
+.btn.ghost:active { transform: none; }
+.btn.dark { background: var(--ai); box-shadow: 0 4px 0 #0f1430; }
+
+/* ── O palco do golpe */
+.stage { background: linear-gradient(#fff, #F1F3F7 78%); border-radius: var(--r-m); overflow: hidden; }
+.stage-svg { display: block; width: 100%; height: auto; }
+
+/* ── Obi: a barra de progresso é uma faixa sendo amarrada */
+.obi { position: relative; height: 14px; border-radius: 3px; background: #E4E6EC; overflow: visible; }
+.obi-fill { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 3px; background: var(--faixa);
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.0) 0 5px, rgba(255,255,255,.18) 5px 6px);
+  transition: width .45s cubic-bezier(.2,.8,.2,1), background-color .3s; }
+.obi-knot { position: absolute; top: 50%; width: 22px; height: 22px; left: 0; transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--faixa); border-radius: 4px; box-shadow: 0 0 0 3px var(--algodao); transition: left .45s cubic-bezier(.2,.8,.2,1), background-color .3s; }
+
+/* ── Player de aula */
+.aula { background: var(--papel); border-radius: var(--r-l); padding: 10px; box-shadow: 0 1px 0 var(--linha), 0 12px 30px -18px rgba(30,38,71,.35); }
+.aula .stage { position: relative; }
+.caption { min-height: 104px; padding: 12px 6px 4px; }
+.cap-fase { display: inline-block; font-weight: 900; font-size: 13px; color: var(--ai); background: #E8EBF4; padding: 2px 9px; border-radius: 99px; margin-bottom: 6px; }
+.caption[data-erro="1"] .cap-fase { background: #FBE3E2; color: var(--hinomaru-2); }
+.cap-txt { display: block; font-size: 16.5px; line-height: 1.45; }
+.fases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 8px; }
+.fases button { border: 0; background: #EEF0F5; border-radius: 8px; padding: 7px 2px; font-size: 11.5px; font-weight: 700; color: var(--cinza); }
+.fases button.on { background: var(--ai); color: #fff; }
+.controles { display: flex; gap: 6px; margin-top: 8px; }
+.controles button { flex: 1; min-height: 44px; border: 0; border-radius: 10px; background: #EEF0F5; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.controles button.play { flex: 2; background: var(--ai); color: #fff; }
+.controles button[aria-pressed="true"] { background: #DCE3F5; color: var(--ai); box-shadow: inset 0 0 0 2px var(--ai); }
+.ic { width: 18px; height: 18px; flex: none; }
+
+/* ── Chips de faixa */
+.belt-swatch { display: inline-block; width: 28px; height: 10px; border-radius: 2px; vertical-align: middle; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ── Efeitos de comemoração (fx.js) */
+.fx-confete { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
+.fx-avisos { position: fixed; left: 0; right: 0; bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 55; display: grid; justify-items: center; gap: 8px; pointer-events: none; padding: 0 16px; }
+.fx-aviso { max-width: 440px; background: var(--ai); color: #fff; font-weight: 700; font-size: 16px; padding: 12px 18px; border-radius: 99px; box-shadow: 0 10px 30px -10px rgba(30,38,71,.6); animation: fx-sobe .35s cubic-bezier(.2,1.4,.4,1) both; }
+.fx-aviso.ok { background: var(--ok); }
+.fx-aviso.erro { background: var(--sumi); }
+.fx-aviso.ouro { background: linear-gradient(90deg, #B8860B, #E9B824); color: #2a1d00; }
+.fx-aviso.sai { animation: fx-desce .3s ease both; }
+@keyframes fx-sobe { from { transform: translateY(30px) scale(.9); opacity: 0; } }
+@keyframes fx-desce { to { transform: translateY(20px); opacity: 0; } }
+.fx-pontos { position: fixed; z-index: 58; transform: translateX(-50%); font-family: var(--display); font-size: 26px; color: var(--ok); pointer-events: none; text-shadow: 0 2px 0 #fff; animation: fx-pontos 1.1s ease-out both; }
+@keyframes fx-pontos { 0% { opacity: 0; transform: translate(-50%, 6px) scale(.6); } 20% { opacity: 1; transform: translate(-50%, -10px) scale(1.15); } 100% { opacity: 0; transform: translate(-50%, -70px) scale(1); } }
+.fx-celebra { position: fixed; inset: 0; z-index: 59; background: rgba(20,24,46,.72); display: grid; place-items: center; padding: 20px; animation: fx-fundo .25s ease both; }
+.fx-celebra.sai { animation: fx-fundo .25s ease reverse both; }
+@keyframes fx-fundo { from { opacity: 0; } }
+.fx-cartao { width: 100%; max-width: 380px; background: var(--papel); border-radius: var(--r-l); padding: 26px 22px 22px; text-align: center; animation: fx-sobe .45s cubic-bezier(.2,1.5,.4,1) .05s both; }
+.fx-cartao h2 { color: var(--ai); font-size: 28px; margin: 10px 0 8px; }
+.fx-cartao p { font-size: 16.5px; margin-bottom: 18px; }
+.fx-obi { width: 200px; height: 70px; overflow: visible; }
+.fx-obi-l { transform-origin: center; animation: fx-estica .5s cubic-bezier(.2,1,.3,1) .1s both; }
+.fx-no { transform-origin: 100px 35px; animation: fx-no .45s cubic-bezier(.2,1.8,.4,1) .45s both; }
+@keyframes fx-estica { from { transform: scaleX(0); } }
+@keyframes fx-no { from { transform: scale(0) rotate(-90deg); } }
+.acerto-pulso { animation: fx-pulso .45s cubic-bezier(.2,1.6,.4,1); }
+@keyframes fx-pulso { 40% { transform: scale(1.035); } }
+.erro-treme { animation: fx-treme .35s ease; }
+@keyframes fx-treme { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@media (prefers-reduced-motion: reduce) { .fx-pontos, .fx-confete { display: none; } }
