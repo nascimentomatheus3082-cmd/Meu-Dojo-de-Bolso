@@ -11,10 +11,10 @@ const CONFIG = {
   // Cole o link de cada produto entre as aspas, no lugar de COLE_AQUI.
   // Enquanto estiver COLE_AQUI, o botão mostra "pagamento em configuração".
   checkout: {
-    'essencial':     'COLE_AQUI', // Produto "Dojô de Bolso Essencial" (R$ 17,90)
-    'completo':      'COLE_AQUI', // Produto "Dojô de Bolso Completo" (R$ 27,90)
-    'anual':         'COLE_AQUI', // Produto "Dojô de Bolso Anual" (R$ 49,90, Pix único, acesso por 12 meses)
-    'upgrade-anual': 'COLE_AQUI', // Upsell da página de obrigado (R$ 24,90)
+    'essencial':     'https://pay.cakto.com.br/m4s4uy4_1347618', // Produto "Dojô de Bolso Essencial" (R$ 17,90)
+    'completo':      'https://pay.cakto.com.br/36hwngu_1347627', // Produto "Dojô de Bolso Completo" (R$ 27,90)
+    'anual':         'https://pay.cakto.com.br/32spy49_1347636', // Produto "Dojô de Bolso Anual" (R$ 49,90, Pix único, acesso por 12 meses)
+    'upgrade-anual': 'https://pay.cakto.com.br/dkodhwa_1347659', // Upsell da página de obrigado (R$ 24,90)
 
     // ── Opcional: um link por combinação de order bumps.
     // Se você cadastrar o Plano Família e as Fichas como order bump DENTRO da Cakto,
