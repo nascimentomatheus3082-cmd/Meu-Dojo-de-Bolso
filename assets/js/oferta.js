@@ -42,6 +42,24 @@ function render() {
     ${plano === 'completo' ? `<div class="upgrade"><span>No <b>Anual</b> (R$ ${CONFIG.precos.anual}/ano) a família e as fichas já vêm inclusas.</span><button data-para="anual">Ver</button></div>` : ''}`;
   $$('[data-para]').forEach(b => b.onclick = () => { plano = b.dataset.para; bumps.familia = bumps.fichas = false; render(); track('TrocaPlano', { para: plano }, true); });
 
+  // Sem links de combinação no config.js, os bumps são marcados na própria tela de pagamento (Cakto):
+  // aqui só avisamos, para o cliente não achar que já adicionou.
+  const temCombos = ['familia', 'fichas', 'familia+fichas'].some(s => linkCheckout(plano + '+' + s));
+  if (plano !== 'anual' && !temCombos) {
+    Object.keys(bumps).forEach(k => { bumps[k] = false; });
+    $('#bumps').innerHTML = `
+      <div class="bump-aviso">
+        <b>Na tela de pagamento você ainda pode adicionar:</b>
+        <ul>
+          <li><b>Plano Família</b> por + R$ ${CONFIG.precos.familia}: até 3 judocas no mesmo acesso, cada um com o próprio progresso</li>
+          <li><b>Fichas para imprimir</b> por + R$ ${CONFIG.precos.fichas}: uma ficha A4 por técnica, com o golpe nas 3 fases</li>
+        </ul>
+        <span class="b-prev"><span class="mini" data-spec="gari:osoto"></span><span class="mini" data-spec="koshi"></span><span class="mini" data-spec="koshi:seoi"></span></span>
+      </div>`;
+    $$('.mini').forEach(m => { const st = new JudoStage(m, { spec: m.dataset.spec, belt: faixa.cor }); const f = st.frames[Math.min(4, st.frames.length - 1)]; st.cur = { T: f.T, U: f.U }; st.render(); });
+    resumo();
+    return;
+  }
   $('#bumps').innerHTML = plano === 'anual' ? '' : Object.entries(BUMPS).map(([k, B]) => `
     <label class="bump ${bumps[k] ? 'on' : ''}" data-b="${k}">
       <input type="checkbox" ${bumps[k] ? 'checked' : ''}>

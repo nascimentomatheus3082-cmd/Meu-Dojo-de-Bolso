@@ -55,3 +55,9 @@
 .indique { margin-top: 22px; background: #FFF6E0; border-radius: var(--r-l); padding: 18px; }
 .indique h2 { font-size: 21px; color: var(--ai); margin-bottom: 6px; }
 .indique .btn { margin-top: 12px; }
+.bump-aviso { padding: 16px; border: 3px dashed var(--hinomaru); border-radius: var(--r-l); background: #FFF8F7; font-size: 15px; }
+.bump-aviso > b { color: var(--hinomaru-2); font-size: 16px; }
+.bump-aviso ul { margin: 8px 0 10px; padding-left: 20px; display: grid; gap: 6px; }
+.bump-aviso .b-prev { display: flex; gap: 6px; }
+.bump-aviso .mini { width: 92px; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--linha); }
+.bump-aviso .mini svg { display: block; width: 100%; height: auto; }
