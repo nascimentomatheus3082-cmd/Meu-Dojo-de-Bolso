@@ -1,4 +1,4 @@
-import { BookOpen, Brain, ChartNoAxesCombined, ClipboardCheck, Users, Video, ShieldCheck, Puzzle } from "lucide-react";
+import { BookOpen, Brain, TrendingUp, ClipboardCheck, Users, Video, ShieldCheck, Puzzle } from "lucide-react";
 import { pluginRegistry } from "./registry";
 
 const icons = { "lesson-library": BookOpen, "belt-exam": ClipboardCheck, "progress-tracker": ChartNoAxesCombined, "dojo-sensei": Brain, "video-lab": Video, "family-dojo": Users, "dojo-admin": ShieldCheck } as const;
