@@ -78,6 +78,9 @@ const ICON = {
   som: '<svg class="ic" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5c1.5 1.8 1.5 5.2 0 7M18.5 6c3 3.3 3 8.7 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
 };
 
+/* Capa das telas internas: avatar 3D + selo + título */
+const capa = (av, selo, titulo, sub) => `<section class="capa"><div class="capa-txt"><p class="selo">${selo}</p><h1>${titulo}</h1>${sub ? `<p class="muted">${sub}</p>` : ''}</div><img src="../assets/img/avatar-${av}.jpg" alt="" width="600" height="600"></section>`;
+
 /* ── Rotas */
 const rotas = [
   [/^#?\/?$/, inicio],
@@ -112,36 +115,104 @@ function inicio() {
   const ultima = hist[hist.length - 1];
   const eu = perfilAtual(), todos = perfis();
   const xp = Progresso.pontos(), nv = Progresso.nivel(xp), seq = Progresso.diasSeguidos(), tem = store.get('conquistas', {});
+  const prox = proxima(f);
+  // Trilha: técnicas da faixa → simulado (80%+) → modo banca → exame
+  const passou = hist.some(h => h.nota >= 80), treinouBanca = store.get('banca', 0) > 0;
+  const etapa = feitas < lista.length ? 0 : !passou ? 1 : !treinouBanca ? 2 : 3;
+  const trilha = [
+    ['Técnicas da faixa', `${feitas}/${lista.length}`, `#/aulas/${f.id}`],
+    ['Simulado', ultima ? ultima.nota + '%' : 'meta 80%', '#/simulado'],
+    ['Modo banca', treinouBanca ? 'treinado' : 'o app pede', '#/banca'],
+    ['Exame', etapa === 3 ? 'pronto!' : 'no dojô', null],
+  ];
+  const objetivo = etapa === 0 ? `Revisar ${esc(prox.n)}` : etapa === 1 ? `Tirar 80% no simulado da faixa ${f.nome.toLowerCase()}` : etapa === 2 ? 'Treinar no modo banca' : 'Você está pronto para o exame';
+  const objLink = etapa === 0 ? `#/aula/${prox.id}` : etapa === 1 ? '#/simulado' : '#/banca';
+  const IC = {
+    aulas: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 9v6l5-3z" fill="currentColor"/></svg>',
+    sim: '<svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 13l2 2 3.5-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    banca: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6" fill="currentColor"/><path d="M5 20c.8-4.4 3.6-6.4 7-6.4s6.2 2 7 6.4" fill="currentColor"/></svg>',
+    rev: '<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 4v4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    termos: '<svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9h6M9 13h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    fichas: '<svg viewBox="0 0 24 24"><path d="M7 3h10v6H7zM5 9h14v8h-3v4H8v-4H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    seta: '<svg viewBox="0 0 24 24" class="seta"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  };
+  const tile = (href, ic, cor, b, s) => `<a class="tile" href="${href}"><span class="tile-ic ${cor}">${IC[ic]}</span><span><b>${b}</b><span>${s}</span></span></a>`;
   view.innerHTML = `
     ${limitePerfis() > 1 || todos.length > 1 ? `
     <div class="perfis-barra" role="group" aria-label="Trocar de judoca">
       ${todos.map(p => `<button class="perfil-chip ${p.id === eu.id ? 'on' : ''}" data-p="${p.id}"><span class="avatar">${esc(p.nome.trim()[0] || '?').toUpperCase()}</span>${esc(p.nome)}</button>`).join('')}
       ${todos.length < limitePerfis() ? '<a class="perfil-chip add" href="#/novo-perfil">+ Judoca</a>' : ''}
     </div>` : ''}
-    <div class="saudacao">
-      <p class="muted small">Exame de ${esc(eu.nome)} · <a href="#/perfis">editar</a></p>
-      <h1>Faixa ${f.nome.toLowerCase()}</h1>
+    <div class="home">
+    <div class="ola">
+      <div>
+        <h1>Olá, ${esc(eu.nome.split(' ')[0])}! <span aria-hidden="true">👋</span></h1>
+        <p class="muted">Pronto para evoluir no seu judô hoje? · <a href="#/perfis">editar perfil</a></p>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-ic fogo" aria-hidden="true">🔥</span><span><b>${seq}</b><small>${seq === 1 ? 'dia seguido' : 'dias seguidos'}</small></span></div>
+        <div class="stat"><span class="stat-ic estrela" aria-hidden="true">⭐</span><span><b>${xp.toLocaleString('pt-BR')} <em>XP</em></b><small>Nível ${nv.n} · faltam ${nv.fim - xp}</small></span></div>
+      </div>
     </div>
-    <div class="faixas-esc" role="group" aria-label="Escolher faixa">
-      ${FAIXAS.map(x => `<button class="faixa-chip ${x.id === f.id ? 'on' : ''}" data-f="${x.id}" ${liberada(x.id) ? '' : 'disabled title="Disponível no plano Completo"'}><i style="background:${x.cor}"></i>${x.nome}</button>`).join('')}
-    </div>
-    <div class="progresso-card">
-      <span class="num">${feitas}/${lista.length}</span>
-      <p class="muted">técnicas novas revisadas nesta faixa</p>
+
+    <section class="hero">
+      <div class="hero-txt">
+        <p class="selo">Dojô de Bolso</p>
+        <h2>Seu sensei de bolso para o <span class="ouro">exame de faixa</span></h2>
+        <p class="hero-sub">Golpe por golpe, animado e narrado. Revise as técnicas, faça o simulado e chegue pronto na banca.</p>
+        <a class="btn-ouro" href="#/aulas/${f.id}">${feitas < lista.length ? 'Continuar minha trilha' : 'Rever as aulas'} ${ICON.play}</a>
+      </div>
+      <img class="hero-img" src="../assets/img/avatar-judoca.jpg" alt="" width="600" height="600">
+    </section>
+
+    <section class="card grad">
+      <h3>Minha graduação</h3>
+      <div class="grad-topo">
+        <svg class="grad-faixa" viewBox="0 0 64 40" aria-hidden="true"><path d="M2 12h60v10H2z" fill="${f.cor}"/><path d="M2 12h60v10H2z" fill="url(#brilho)"/><path d="M24 8h16l-2 18H26z" fill="${f.cor}" stroke="rgba(0,0,0,.25)"/><path d="M27 24l-9 14 7-1 3 3 4-15zM37 24l9 14-7-1-3 3-4-15z" fill="${f.cor}" stroke="rgba(0,0,0,.25)"/><defs><linearGradient id="brilho" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs></svg>
+        <div><b class="grad-nome">Faixa ${f.nome.toLowerCase()}</b><span class="muted small">${f.kyu} · vem da ${f.vem}</span></div>
+        <span class="grad-pct"><b>${pct}%</b> concluído</span>
+      </div>
       <div class="obi"><div class="obi-fill" style="width:${pct}%"></div><div class="obi-knot" style="left:${pct}%"></div></div>
-    </div>
-    <div class="placar">
-      <div><b>${seq}</b><span>${seq === 1 ? 'dia seguido' : 'dias seguidos'}</span><i aria-hidden="true">🔥</i></div>
-      <div><b>${xp}</b><span>pontos</span><i aria-hidden="true">⭐</i></div>
-      <div class="nivel"><b>Nível ${nv.n}</b><span class="nivel-barra"><i style="width:${nv.pct}%"></i></span><span>faltam ${nv.fim - xp} pontos</span></div>
-    </div>
-    <div class="atalhos">
-      <a class="atalho grande" href="#/aulas/${f.id}"><b>${feitas < lista.length ? 'Continuar as aulas' : 'Rever as aulas'}</b><span>${proxima(f) ? 'Próxima: ' + esc(proxima(f).n) : 'Todas revisadas. Hora do simulado.'}</span></a>
-      <a class="atalho" href="#/simulado"><b>Simulado</b><span>${ultima ? 'Último: ' + ultima.nota + '%' : 'Com gabarito comentado'}</span></a>
-      <a class="atalho" href="#/banca"><b>Modo banca</b><span>O app pede, você mostra</span></a>
-      <a class="atalho" href="#/aulas/${f.id}?todas"><b>Revisão</b><span>${tecnicasAte(f.id).length - lista.length} das faixas anteriores</span></a>
-      <a class="atalho" href="#/glossario"><b>Termos</b><span>${GLOSSARIO.length} palavras com pronúncia</span></a>
-      ${temFichas() ? '<a class="atalho" href="../fichas/"><b>Fichas</b><span>Para imprimir em A4</span></a>' : ''}
+      <div class="faixas-esc" role="group" aria-label="Escolher faixa">
+        ${FAIXAS.map(x => `<button class="faixa-chip ${x.id === f.id ? 'on' : ''}" data-f="${x.id}" ${liberada(x.id) ? '' : 'disabled title="Disponível no plano Completo"'}><i style="background:${x.cor}"></i>${x.nome}</button>`).join('')}
+      </div>
+      <a class="objetivo" href="${objLink}"><span class="trofeu" aria-hidden="true">🏆</span><span><b>Próximo objetivo</b><span>${objetivo}</span></span>${IC.seta}</a>
+    </section>
+
+    <section class="acesso">
+      <h3>Acesso rápido</h3>
+      <div class="tiles">
+        ${tile(`#/aulas/${f.id}`, 'aulas', 'vermelho', 'Aulas', prox ? 'Próxima: ' + esc(prox.n) : 'Todas revisadas')}
+        ${tile('#/simulado', 'sim', 'verde', 'Simulado', ultima ? 'Último: ' + ultima.nota + '%' : 'Com gabarito comentado')}
+        ${tile('#/banca', 'banca', 'azul', 'Modo banca', 'O app pede, você mostra')}
+        ${tile(`#/aulas/${f.id}?todas`, 'rev', 'roxo', 'Revisão', `${tecnicasAte(f.id).length - lista.length} das faixas anteriores`)}
+        ${tile('#/glossario', 'termos', 'ouro', 'Termos', `${GLOSSARIO.length} palavras com pronúncia`)}
+        ${temFichas() ? tile('../fichas/', 'fichas', 'cinza', 'Fichas', 'Para imprimir em A4') : ''}
+      </div>
+    </section>
+
+    <section class="card trilha">
+      <h3>Minha trilha de evolução</h3>
+      <ol class="trilha-passos">
+        ${trilha.map(([nome, info, href], i) => {
+          const st = i < etapa ? 'feito' : i === etapa ? 'atual' : 'bloq';
+          const icone = st === 'feito' ? '✓' : st === 'atual' ? '▶' : '🔒';
+          const inner = `<span class="tp-dot" aria-hidden="true">${icone}</span><b>${nome}</b><small>${info}</small>`;
+          return `<li class="${st}">${href && st !== 'bloq' ? `<a href="${href}">${inner}</a>` : `<span>${inner}</span>`}</li>`;
+        }).join('')}
+      </ol>
+    </section>
+
+    <section class="card sensei">
+      <div class="sensei-topo">
+        <img src="../assets/img/avatar-sensei.jpg" alt="" width="600" height="600">
+        <div><h3>Sensei Virtual</h3><p class="balao">Como posso te ajudar hoje, judoca?</p></div>
+      </div>
+      <a class="opcao" href="${prox ? '#/aula/' + prox.id : '#/aulas/' + f.id}"><span>▶</span>Explicar uma técnica${IC.seta}</a>
+      <a class="opcao" href="#/simulado"><span>☰</span>Criar um simulado${IC.seta}</a>
+      <a class="opcao" href="#/banca"><span>🥋</span>Treinar para a banca${IC.seta}</a>
+      <div class="opcao breve"><span>?</span>Tirar dúvidas por chat<em>em breve</em></div>
+    </section>
     </div>
     <section class="conquistas">
       <h2 class="grupo-tit">Conquistas <small>· ${Object.keys(tem).length} de ${CONQUISTAS.length}</small></h2>
@@ -226,6 +297,7 @@ function aulas(fid) {
   const grupos = {};
   lista.forEach(t => (grupos[t.g] = grupos[t.g] || []).push(t));
   view.innerHTML = `
+    ${capa('sensei', todas ? 'Revisão' : 'Aulas · ' + f.kyu, todas ? 'Faixas anteriores' : 'Faixa ' + f.nome.toLowerCase(), `${lista.filter(t => v[t.id]).length} de ${lista.length} técnicas revisadas`)}
     ${todas ? '' : `<div class="faixas-esc">${FAIXAS.map(x => `<a class="faixa-chip ${x.id === f.id ? 'on' : ''}" href="#/aulas/${x.id}" ${liberada(x.id) ? '' : 'aria-disabled="true" style="opacity:.45;pointer-events:none"'}><i style="background:${x.cor}"></i>${x.nome}</a>`).join('')}</div>`}
     <input class="busca" type="search" placeholder="Buscar técnica pelo nome ou tradução" aria-label="Buscar técnica">
     <div id="grupos">${Object.entries(grupos).map(([g, ts]) => `
@@ -366,8 +438,7 @@ function simulado() {
   const cfg = store.get('simcfg', { n: 20, foco: 'tudo', imediata: true });
   const hist = store.get('historico', []).filter(h => h.faixa === f.id).slice(-5).reverse();
   view.innerHTML = `
-    <h1 style="color:var(--ai);font-size:28px;margin-top:6px">Simulado da faixa ${f.nome.toLowerCase()}</h1>
-    <p class="muted" style="margin-top:6px">As questões são sorteadas a cada prova, com técnicas da sua faixa e das anteriores.</p>
+    ${capa('coach', 'Simulado', 'Faixa ' + f.nome.toLowerCase(), 'Questões sorteadas a cada prova, com técnicas da sua faixa e das anteriores.')}
     <div class="sim-config">
       <label><span>Quantas questões</span><div class="seg" data-k="n">${[10, 20, 30, 50].map(x => `<button data-v="${x}" class="${cfg.n === x ? 'on' : ''}">${x}</button>`).join('')}</div></label>
       <label><span>O que cobrar</span><div class="seg" data-k="foco">${[['tudo', 'Exame completo'], ['tecnica', 'Só técnicas'], ['teoria', 'Só teoria']].map(([v, l]) => `<button data-v="${v}" class="${cfg.foco === v ? 'on' : ''}">${l}</button>`).join('')}</div></label>
@@ -431,7 +502,7 @@ function prova(qs, cfg, f) {
       <div class="temas">${Object.entries(temas).sort((a, b) => a[1][0] / a[1][1] - b[1][0] / b[1][1]).map(([t, [a, n]]) => `
         <div class="tema-l"><span>${t}</span><span class="barra-t"><i style="width:${a / n * 100}%"></i></span><b>${a}/${n}</b></div>`).join('')}</div>
       <button class="btn" id="denovo">Fazer outra prova</button>
-      <h2 style="color:var(--ai);margin-top:28px;font-size:22px">Gabarito comentado</h2>
+      <h2 class="sub-tit">Gabarito comentado</h2>
       <div class="gabarito">${qs.map((q, k) => `<div class="gab ${resp[k] === q.c ? '' : 'no'}"><b>${k + 1}. ${esc(q.q)}</b>
         ${resp[k] === q.c ? '' : `Você marcou: ${esc(q.o[resp[k]] ?? '—')}<br>`}Certa: ${esc(q.o[q.c])}. ${esc(q.x)}</div>`).join('')}</div>`;
     $('#denovo').onclick = () => simulado();
@@ -460,7 +531,7 @@ function banca() {
   const render = () => {
     const t = ordem[i % ordem.length];
     view.innerHTML = `
-      <p class="muted" style="margin-top:6px">Fique em pé, com espaço. O app fala o nome do golpe e você executa no ar (ou com um parceiro). Depois confira a animação.</p>
+      ${capa('judoca', 'Modo banca', 'O app pede, você mostra', 'Fique em pé, com espaço. Execute no ar ou com um parceiro e depois confira a animação.')}
       <div class="banca-card">
         <p class="pede">A banca pede:</p>
         <p class="nome">${esc(t.n)}</p>

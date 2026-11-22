@@ -1,0 +1,124 @@
+/* Dojô de Bolso 2.0 no funil (quiz, oferta, obrigado): mesmo tema escuro e dourado do app.
+   Carregado depois do base.css, funil.css e oferta.css; só muda aparência. */
+:root {
+  --obsidian: #101114; --grafite: #1B1D22; --elevado: #252932; --borda: #30343D;
+  --ouro: #D5AD55; --ouro-claro: #F3D98B; --vermelho: #D64045; --texto: #F2F3F5; --mudo: #9DA3AE; --sucesso: #4C9B76;
+  --metal: linear-gradient(135deg, #8C6A26 0%, #F3D98B 24%, #C99A3E 46%, #FCE9B0 62%, #A87C2E 82%, #E2BE6A 100%);
+  --metal-borda: linear-gradient(135deg, rgba(243,217,139,.55), rgba(140,106,38,.15) 40%, rgba(48,52,61,.6) 60%, rgba(213,173,85,.45));
+  --sombra: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 40px -24px rgba(0,0,0,.9);
+  --algodao: var(--obsidian); --papel: var(--grafite); --sumi: var(--texto); --cinza: var(--mudo); --linha: var(--borda);
+  --ai: var(--ouro); --ok: var(--sucesso); --hinomaru: var(--vermelho); --hinomaru-2: #F08A8D;
+  --r-m: 14px; --r-l: 18px;
+  --display: 'Manrope', system-ui, sans-serif; --body: 'Manrope', system-ui, sans-serif;
+}
+body { background: radial-gradient(700px 420px at 90% -5%, rgba(214,64,69,.12), transparent 60%), var(--obsidian); background-attachment: fixed; color: var(--texto); font-size: 16.5px; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -.02em; color: var(--texto); }
+:focus-visible { outline-color: var(--ouro); }
+
+/* botões */
+.btn { background: var(--metal); color: #1A1406; font-weight: 800; text-shadow: 0 1px 0 rgba(255,255,255,.35);
+  box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 -2px 0 rgba(0,0,0,.25) inset, 0 12px 26px -12px rgba(213,173,85,.75); }
+.btn:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(255,255,255,.4) inset; }
+.btn.ghost, .btn.dark { background: var(--elevado); color: var(--texto); text-shadow: none; box-shadow: inset 0 0 0 1px var(--borda); }
+
+/* superfícies comuns */
+.hero-fatos li, .opcao, .feedback, .plano, .lista-app li, .cartao-plano, .garantia, .faq details, .item-plano, .resumo, .passos-ok li, .upsell, .aula {
+  background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0) 40%), var(--grafite);
+  border: 1px solid var(--borda); box-shadow: var(--sombra); }
+
+/* topo */
+.topo { background: rgba(16,17,20,.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--borda); }
+.logo { font-family: var(--display); font-weight: 800; color: var(--texto); letter-spacing: .02em; }
+.obi { background: #2A2E37; height: 10px; border-radius: 99px; }
+.obi-fill { border-radius: 99px; background: var(--metal); }
+.obi-knot { width: 16px; height: 16px; background: var(--ouro); box-shadow: 0 0 0 3px var(--obsidian); }
+
+/* início do quiz com o vídeo 3D */
+.hero-video { position: relative; margin: 6px 0 18px; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 4.4; max-height: 58vh; width: 100%;
+  background: #0B0C0E; border: 1px solid var(--borda); box-shadow: var(--sombra), 0 30px 60px -30px rgba(214,64,69,.35); }
+.hero-video::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: var(--metal-borda); pointer-events: none; z-index: 2;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.hero-video::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(11,12,14,.85), transparent 38%); pointer-events: none; }
+.hero-video video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; display: block; }
+.hero-tag { position: absolute; left: 14px; bottom: 14px; z-index: 1; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+  color: #1A1406; background: var(--metal); padding: 6px 12px; border-radius: 99px; box-shadow: 0 6px 16px -6px rgba(0,0,0,.8); }
+.hero-h { color: var(--texto); font-size: clamp(28px, 7.6vw, 38px); line-height: 1.1; }
+.hero-p { color: #C9CDD4; font-size: 17px; }
+.hero-fatos li { border-left: 3px solid var(--ouro); }
+.hero-fatos b { color: var(--ouro-claro); }
+
+/* perguntas */
+.passo { color: var(--ouro); text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 800; }
+.tela h2 { color: var(--texto); }
+.opcao { color: var(--texto); border-width: 1px; transition: border-color .15s, transform .1s, background-color .15s; }
+.opcao:hover { border-color: rgba(213,173,85,.55); }
+.opcao.sel { border-color: var(--ouro); background: rgba(213,173,85,.12); }
+.opcao.certa { border-color: var(--sucesso); background: rgba(76,155,118,.16); }
+.opcao.errada { border-color: var(--vermelho); background: rgba(214,64,69,.16); }
+.feedback { border-left: 3px solid var(--ouro); }
+.stage { background: radial-gradient(120% 90% at 50% 10%, #2A2E37, #15171B 80%); }
+.desafio-stage { box-shadow: inset 0 0 0 1px var(--borda); }
+.campo input { background: var(--grafite); border: 1px solid var(--borda); color: var(--texto); }
+.campo input:focus { border-color: var(--ouro); }
+.montando-lista li.feito { color: var(--texto); }
+.montando-lista li.feito .chk { background: linear-gradient(145deg, #6CC596, #2E8B5C); border-color: transparent; }
+
+/* resultado */
+.res-cab { background: radial-gradient(320px 220px at 100% 0%, rgba(214,64,69,.35), transparent 70%), linear-gradient(135deg, #17181C, #0B0C0E); border: 1px solid var(--borda); box-shadow: var(--sombra); }
+.res-cab h1 { color: var(--texto); }
+.res-cab .res-meta b { font-weight: 800; background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.plano h3, .bloco > h2, .faq h2 { color: var(--texto); }
+.plano li span:first-child { color: var(--ouro-claro); }
+.dor { background: radial-gradient(400px 200px at 0% 0%, rgba(213,173,85,.14), transparent 70%), var(--grafite); border: 1px solid rgba(213,173,85,.35); }
+.lista-app b { color: var(--ouro-claro); }
+.fases button, .controles button { background: var(--elevado); color: var(--texto); }
+.fases button.on, .controles button.play { background: var(--metal); color: #1A1406; }
+.controles button[aria-pressed="true"] { background: rgba(213,173,85,.16); color: var(--ouro-claro); box-shadow: inset 0 0 0 1px var(--ouro); }
+.cap-fase { background: rgba(213,173,85,.14); color: var(--ouro-claro); }
+
+/* planos */
+.cartao-plano { border-width: 1px; }
+.cartao-plano h3 { color: var(--texto); }
+.cartao-plano .selo { background: var(--elevado); color: var(--ouro-claro); box-shadow: inset 0 0 0 1px var(--borda); }
+.cartao-plano.destaque { border: 1px solid var(--ouro); box-shadow: var(--sombra), 0 0 0 3px rgba(213,173,85,.15); }
+.cartao-plano.destaque .selo { background: var(--metal); color: #1A1406; }
+.cartao-plano.anual { background: radial-gradient(360px 240px at 100% 0%, rgba(214,64,69,.30), transparent 70%), linear-gradient(160deg, #1E1A12, #121214 60%); border: 1px solid rgba(213,173,85,.55); color: var(--texto); }
+.cartao-plano.anual .selo { background: linear-gradient(145deg, #F06A6E, #B8262B); color: #fff; box-shadow: none; }
+.cartao-plano.anual .btn.dark { background: var(--metal); color: #1A1406; box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 12px 26px -12px rgba(213,173,85,.75); }
+.preco { font-weight: 800; color: var(--texto); }
+.cartao-plano.anual .preco, .cartao-plano.destaque .preco { background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.faq summary::after { color: var(--ouro); }
+.seguro { color: #8FD3AE; }
+
+/* página de oferta (pedido) */
+.pedido h1 { color: var(--texto); }
+.item-plano { border: 1px solid var(--ouro); }
+.item-plano h2 { color: var(--texto); }
+.item-plano .p-preco { font-weight: 800; color: var(--ouro-claro); }
+.upgrade { background: rgba(213,173,85,.10); border: 1px solid rgba(213,173,85,.35); }
+.upgrade button { background: var(--metal); color: #1A1406; }
+.bump, .bump-aviso { background: rgba(214,64,69,.07); border: 2px dashed rgba(214,64,69,.7); }
+.bump.on { background: rgba(214,64,69,.14); border-style: solid; }
+.bump .caixa { background: var(--grafite); border-color: var(--vermelho); }
+.bump .b-tit, .bump-aviso > b { color: #F08A8D; }
+.bump .b-prev .mini, .bump-aviso .mini { background: #20232A; box-shadow: 0 0 0 1px var(--borda); }
+.total b { font-weight: 800; background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* obrigado */
+.ok-selo { background: linear-gradient(145deg, #6CC596, #2E8B5C); box-shadow: 0 0 0 10px rgba(76,155,118,.18), 0 0 40px rgba(76,155,118,.35); }
+.ok-cab h1 { color: var(--texto); }
+.acesso { background: radial-gradient(320px 200px at 100% 0%, rgba(213,173,85,.20), transparent 70%), var(--grafite); border: 1px solid rgba(213,173,85,.45); box-shadow: var(--sombra); }
+.acesso .btn { background: var(--metal); color: #1A1406; box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 12px 26px -12px rgba(213,173,85,.75); }
+.passos-ok li::before { background: var(--metal); color: #1A1406; font-weight: 800; }
+.passos-ok b { color: var(--ouro-claro); }
+.upsell { border: 1px solid rgba(214,64,69,.7); }
+.upsell .u-tag { background: linear-gradient(145deg, #F06A6E, #B8262B); }
+.upsell h2 { color: var(--texto); }
+.upsell .u-preco { font-weight: 800; color: var(--ouro-claro); }
+.indique { background: var(--grafite); border: 1px solid var(--borda); }
+.indique h2 { color: var(--texto); }
+.rodape a { color: var(--ouro); }
+
+@media (min-width: 720px) {
+  .hero-video { aspect-ratio: 16 / 10; }
+}

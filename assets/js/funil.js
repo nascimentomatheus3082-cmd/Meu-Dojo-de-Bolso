@@ -226,7 +226,5 @@ function resultado() {
 function embaralhar(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
 /* ── Início */
-const hero = new JudoStage($('#heroStage'), { spec: 'gari:osoto', belt: '#1F5FBF' });
-(async () => { const specs = ['gari:osoto', 'koshi:seoi', 'tsuri:joelho', 'ma']; let i = 0;
-  while (document.querySelector('[data-tela="inicio"].ativa')) { hero.load(specs[i++ % specs.length]); await hero.playAll(false); } })();
-$$('[data-go="quem"]').forEach(b => b.onclick = () => { hero.stop(); track('ViewContent', { content_name: 'quiz_inicio' }); mostrarPergunta(0); });
+// O topo do quiz agora é o vídeo 3D (assets/video/golpe-3d.mp4); pausa quando o quiz começa.
+$$('[data-go="quem"]').forEach(b => b.onclick = () => { const v = $('#heroVideo'); if (v) v.pause(); track('ViewContent', { content_name: 'quiz_inicio' }); mostrarPergunta(0); });
