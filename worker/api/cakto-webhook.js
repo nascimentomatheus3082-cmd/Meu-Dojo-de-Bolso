@@ -2,7 +2,7 @@
    A Cakto avisa aqui cada compra aprovada, reembolso e chargeback.
    Cadastre na Cakto (Integrações > Webhooks) a URL https://meudojodebolso.com/api/cakto-webhook
    com os eventos: purchase_approved, refund, chargeback. */
-import { json, erro, faltaConfig, db, normEmail, soDigitos, produtoDoNome, assinaturaCaktoOk } from '../_shared/acesso.js';
+import { json, erro, faltaConfig, db, normEmail, soDigitos, produtoDoNome, assinaturaCaktoOk } from '../acesso.js';
 
 const STATUS = { purchase_approved: 'pago', refund: 'cancelado', chargeback: 'cancelado' };
 

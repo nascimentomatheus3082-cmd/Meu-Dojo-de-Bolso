@@ -1,0 +1,17 @@
+{
+  // Dojô de Bolso: o site estático + a API do acesso fechado num Worker só.
+  // A Cloudflare roda "npx wrangler deploy" a cada push no GitHub.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "meu-dojo-de-bolso",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    // Só /api/* passa pelo código; o resto sai direto dos arquivos (rápido e grátis).
+    "run_worker_first": ["/api/*"]
+  },
+  // Mantém as variáveis e segredos cadastrados no painel da Cloudflare a cada deploy.
+  "keep_vars": true,
+  "observability": { "enabled": true }
+}

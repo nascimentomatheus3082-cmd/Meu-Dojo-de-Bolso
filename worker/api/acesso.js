@@ -1,7 +1,7 @@
 /* GET  /api/acesso            -> confere a sessão e devolve o plano atual
    POST /api/acesso { faixa }  -> Essencial: grava a faixa escolhida (uma vez só)
    Cabeçalho: Authorization: Bearer <token> */
-import { json, erro, faltaConfig, lerToken, lerAcesso, salvarAcesso, comprasPagas, calcularPlano, lerJson } from '../_shared/acesso.js';
+import { json, erro, faltaConfig, lerToken, lerAcesso, salvarAcesso, comprasPagas, calcularPlano, lerJson } from '../acesso.js';
 
 const FAIXAS = ['branca', 'cinza', 'azul', 'amarela', 'laranja', 'verde', 'roxa', 'marrom', 'preta'];
 

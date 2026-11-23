@@ -5,7 +5,7 @@
 import {
   json, erro, faltaConfig, normEmail, soDigitos, comprasPagas, lerAcesso, salvarAcesso,
   calcularPlano, hashSenha, registrarAparelho, aparelhoValido, bloqueado, falhou, zerar, lerJson, respostaLogin,
-} from '../_shared/acesso.js';
+} from '../acesso.js';
 
 export async function onRequestPost({ request, env }) {
   if (faltaConfig(env).length) return erro('O acesso ainda está sendo configurado. Tente de novo em alguns minutos.', 503);

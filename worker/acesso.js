@@ -1,5 +1,5 @@
-/* Dojô de Bolso: lógica do acesso fechado, usada pelas Cloudflare Pages Functions.
-   Variáveis de ambiente (Cloudflare > Pages > Settings > Variables and Secrets):
+/* Dojô de Bolso: lógica do acesso fechado, usada pelo Worker da Cloudflare (worker/index.js).
+   Variáveis de ambiente (Cloudflare > Workers & Pages > meu-dojo-de-bolso > Settings > Variables and Secrets):
      SUPABASE_URL          https://xxxx.supabase.co
      SUPABASE_SERVICE_KEY  chave service_role do Supabase (secreta)
      CAKTO_SECRET          o "secret" do webhook criado na Cakto

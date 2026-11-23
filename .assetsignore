@@ -1,0 +1,12 @@
+# Arquivos que NÃO vão para o site público (o Worker usa a raiz como pasta de arquivos)
+.git
+.gitignore
+.assetsignore
+.nojekyll
+.wrangler
+node_modules
+wrangler.jsonc
+worker
+supabase
+README.md
+*.md

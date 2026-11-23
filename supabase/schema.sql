@@ -1,6 +1,6 @@
 -- Dojô de Bolso: banco do acesso fechado.
 -- Cole tudo no Supabase em SQL Editor > New query > Run.
--- Só o servidor (Cloudflare Functions, com a chave service_role) lê e grava estas tabelas:
+-- Só o servidor (Worker da Cloudflare, com a chave service_role) lê e grava estas tabelas:
 -- o RLS está ligado e não há nenhuma política, então o navegador não acessa nada direto.
 
 -- Cada pedido aprovado na Cakto (vem do webhook). Plano e adicionais saem daqui.
