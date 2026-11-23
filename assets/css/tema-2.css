@@ -311,3 +311,23 @@ a { color: inherit; }
   .capa img { width: 230px; height: 230px; right: 0; bottom: -40px; }
   .tec-lista { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── Acesso fechado: tela de login (login.js) */
+body.modo-login .abas, body.modo-login .barra { display: none; }
+body.modo-login #view { padding-bottom: 32px; }
+.login { max-width: 420px; margin: 0 auto; padding: 40px 0 24px; display: grid; gap: 14px; }
+.login-selo { width: 64px; height: 64px; border-radius: 50%; justify-self: center;
+  background: radial-gradient(circle at 50% 42%, var(--vermelho) 0 30%, transparent 31%), var(--grafite);
+  box-shadow: 0 0 0 2px var(--ouro), var(--sombra); }
+.login h1 { color: var(--texto); font-size: 28px; text-align: center; margin: 0; }
+.login > .muted { text-align: center; margin: 0; }
+.login form { display: grid; gap: 12px; margin-top: 4px; }
+.login .btn { width: 100%; justify-content: center; margin-top: 4px; }
+.login .btn[disabled] { opacity: .6; }
+.login-aviso { background: var(--elevado); border: 1px solid var(--borda); border-left: 3px solid var(--ouro);
+  border-radius: var(--r-m); padding: 12px 14px; margin: 0; font-size: 15px; }
+.login-troca, .login-suporte, .login-nota { text-align: center; margin: 0; color: var(--mudo); font-size: 15px; }
+.login-troca a, .login-suporte a { color: var(--ouro); font-weight: 700; }
+.login-nota { font-size: 13px; }
+.conta { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--borda); display: grid; gap: 10px; }
+.conta p { margin: 0; word-break: break-all; }

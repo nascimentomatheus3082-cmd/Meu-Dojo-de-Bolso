@@ -39,10 +39,13 @@ function apagarPerfil(id) {
    /app/?plano=completo | ?plano=essencial&faixa=verde | acrescente &familia=1 para o Plano Família */
 (function acesso() {
   const q = new URLSearchParams(location.search);
-  if (q.get('plano')) raw.set('plano', q.get('plano'));
-  if (q.get('familia') === '1') raw.set('familia', true);
-  if (q.get('fichas') === '1') raw.set('fichas', true);
-  if (q.get('faixa')) raw.set('faixaPlano', q.get('faixa'));
+  // Com o acesso fechado, o plano vem do servidor (login.js) e o link não libera nada.
+  if (!Acesso.ligado) {
+    if (q.get('plano')) raw.set('plano', q.get('plano'));
+    if (q.get('familia') === '1') raw.set('familia', true);
+    if (q.get('fichas') === '1') raw.set('fichas', true);
+    if (q.get('faixa')) raw.set('faixaPlano', q.get('faixa'));
+  }
   // quem usava o app antes dos perfis: os dados viram o perfil 1
   if (!raw.get('perfis') && (raw.get('vistos') || raw.get('faixa'))) {
     salvarPerfis([{ id: 'p1', nome: 'Judoca 1' }]); raw.set('perfilAtual', 'p1');
@@ -95,6 +98,8 @@ const rotas = [
 function rotear() {
   limpar.forEach(f => { try { f(); } catch (e) {} }); limpar = [];
   Voz.stop();
+  if (!Acesso.liberado()) { Acesso.tela(); return; }
+  document.body.classList.remove('modo-login');
   if (!perfis().length) { cadastro(true); return; }
   aplicarCor();
   Progresso.verificar();
@@ -248,7 +253,7 @@ function cadastro(primeiro) {
   $('#cOk').onclick = () => {
     const nome = $('#cNome').value.trim();
     if (!nome) { $('#cErro').hidden = false; $('#cNome').focus(); return; }
-    if (plano() === 'essencial' && !raw.get('faixaPlano')) raw.set('faixaPlano', faixa);
+    if (plano() === 'essencial' && !raw.get('faixaPlano')) { raw.set('faixaPlano', faixa); Acesso.salvarFaixa(faixa); }
     criarPerfil(nome, faixa); location.hash = '#/'; rotear();
   };
   $('#cNome').addEventListener('keydown', e => { if (e.key === 'Enter') $('#cOk').click(); });
@@ -274,7 +279,12 @@ function telaPerfis() {
       </li>`; }).join('')}</ul>
     ${lista.length < lim ? '<a class="btn dark" href="#/novo-perfil">Adicionar judoca</a>'
       : lim === 1 ? '<p class="aviso">Tem mais de um judoca em casa? O Plano Família libera até 3 judocas no mesmo acesso, cada um com o próprio progresso.</p>'
-      : `<p class="aviso">Você já usa os ${lim} judocas do Plano Família.</p>`}`;
+      : `<p class="aviso">Você já usa os ${lim} judocas do Plano Família.</p>`}
+    ${Acesso.ligado ? `<div class="conta">
+      <p><span class="muted">Conectado como</span> <b>${esc(Acesso.email() || '')}</b></p>
+      <button class="btn ghost" id="sairConta">Sair desta conta</button>
+    </div>` : ''}`;
+  if ($('#sairConta')) $('#sairConta').onclick = () => { if (confirm('Sair da conta neste aparelho? O progresso dos judocas continua salvo aqui.')) Acesso.sair(); };
   $$('.perfis-lista li').forEach(li => li.onclick = e => {
     const b = e.target.closest('button'); if (!b) return;
     const id = li.dataset.p, p = perfis().find(x => x.id === id);
@@ -570,4 +580,4 @@ function glossario() {
   $('.busca').oninput = e => { const q = e.target.value.toLowerCase(); $$('.termos li').forEach(li => li.hidden = q && !li.dataset.b.includes(q)); };
 }
 
-rotear();
+Acesso.iniciar(rotear);

@@ -85,6 +85,13 @@
   if (plano === 'anual' || q.get('fichas') === '1') extras.push('fichas para imprimir');
   document.getElementById('acessoTit').textContent = 'Plano ' + nomes[plano];
   document.getElementById('acessoTxt').textContent = extras.length ? 'Inclui ' + extras.join(' e ') + '. Toque no botão para entrar.' : 'Toque no botão para entrar. Guarde este link ou o e-mail de acesso.';
+  if (CONFIG.acessoFechado) {
+    // Acesso fechado: o plano vem da compra; aqui o cliente só cria a senha.
+    document.getElementById('abrirApp').href = (CONFIG.dominio || '..') + '/app/#/primeiro-acesso';
+    document.getElementById('abrirApp').textContent = 'Criar meu acesso';
+    document.getElementById('acessoTxt').innerHTML = 'Crie a sua senha com o <b>mesmo e-mail do pagamento</b> e os <b>4 últimos números do celular</b> que você informou na compra. Leva 30 segundos.' + (extras.length ? ' Inclui ' + extras.join(' e ') + '.' : '');
+    document.getElementById('okTexto').textContent = 'Se o Pix acabou de ser pago, espere 1 minuto antes de criar o acesso.';
+  }
   document.querySelectorAll('[data-preco]').forEach(e => e.textContent = CONFIG.precos[e.dataset.preco]);
   document.querySelectorAll('[data-garantia]').forEach(e => e.textContent = CONFIG.garantiaDias);
 

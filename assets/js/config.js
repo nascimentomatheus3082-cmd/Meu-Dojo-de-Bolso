@@ -39,6 +39,12 @@ const CONFIG = {
   // Precisam bater com os preços cadastrados na Cakto.
   precos: { essencial: '17,90', completo: '27,90', anual: '49,90', anualMes: '4,99', familia: '9,90', fichas: '7,90', upgradeAnual: '24,90' },
   garantiaDias: 7,
+
+  // ── 5. ACESSO FECHADO (login) ─────────────────────────────────────
+  // true: o app só abre com e-mail e senha de quem comprou (o plano vem da compra na Cakto).
+  // Só ligue depois de configurar o Supabase e as variáveis na Cloudflare (ACESSO-FECHADO.md).
+  acessoFechado: false,
+  dominio: 'https://meudojodebolso.com',
 };
 
 /* Devolve o link de checkout já preenchido, ou '' se ainda estiver COLE_AQUI/vazio. */
