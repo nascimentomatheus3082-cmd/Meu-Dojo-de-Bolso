@@ -29,7 +29,7 @@ const CONFIG = {
 
   // ── 2. PIXEL DA META ──────────────────────────────────────────────
   // Gerenciador de Eventos > Fontes de dados > ID do conjunto de dados. Deixe '' para desligar.
-  pixelId: '',
+  pixelId: '1685183036344661', // "Pixel Dojô de Bolso", conta OFERTAS-BRL
 
   // ── 3. WHATSAPP DE SUPORTE ────────────────────────────────────────
   // Só números, com 55 e DDD. Ex.: '5511999999999'
