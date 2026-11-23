@@ -1,0 +1,7 @@
+# Links curtos do Dojô de Bolso (Cloudflare lê este arquivo e redireciona).
+# Ex.: /essencial/laranja -> página de oferta do Essencial da faixa laranja.
+/essencial/:faixa  /oferta/?plano=essencial&faixa=:faixa  302
+/essencial         /oferta/?plano=essencial               302
+/completo          /oferta/?plano=completo                302
+/anual             /oferta/?plano=anual                   302
+/teste             /                                      302
