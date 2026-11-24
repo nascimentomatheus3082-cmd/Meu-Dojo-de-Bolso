@@ -33,6 +33,9 @@ export async function onRequestPost({ request, env }) {
   }
   await zerar(env, chave);
 
+  const plano = calcularPlano(compras);
+  if (!plano) return erro('Não encontramos um plano ativo nesta compra (só adicional ou reembolso). Fale com o suporte.', 403);
+
   const antes = await lerAcesso(env, email);
   const acesso = {
     email,
@@ -42,5 +45,5 @@ export async function onRequestPost({ request, env }) {
     versao: antes ? antes.versao + 1 : 1,
   };
   await salvarAcesso(env, acesso);
-  return respostaLogin(env, email, acesso, calcularPlano(compras));
+  return respostaLogin(env, email, acesso, plano);
 }
