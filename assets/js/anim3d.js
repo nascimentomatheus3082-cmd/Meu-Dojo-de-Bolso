@@ -158,9 +158,10 @@
   /* ── Palco: cena, luz, câmera orbital e renderização sob demanda */
   class Palco3D {
     constructor(container, opts = {}) {
-      const T = window.THREE; this.T = T; this.container = container;
+      const T = window.THREE; this.T = T; this.container = container; this.aspecto = opts.aspecto || 1.6;
       container.classList.add('stage-3d');
-      const r = this.r = new T.WebGLRenderer({ antialias: true, powerPreference: 'low-power' });
+      // preservar: mantém o quadro na tela para captura (usado só na geração de vídeos)
+      const r = this.r = new T.WebGLRenderer({ antialias: true, powerPreference: 'low-power', preserveDrawingBuffer: !!opts.preservar });
       r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       r.outputColorSpace = T.SRGBColorSpace; r.toneMapping = T.ACESFilmicToneMapping; r.toneMappingExposure = 1.05;
       r.shadowMap.enabled = true; r.shadowMap.type = T.PCFSoftShadowMap;
@@ -212,7 +213,7 @@
       this.cam.lookAt(this.alvo);
     }
     tamanho() {
-      const w = this.container.clientWidth || 320, h = Math.round(w / 1.6);
+      const w = this.container.clientWidth || 320, h = Math.round(w / (this.aspecto || 1.6));
       this.r.setSize(w, h, false); this.r.domElement.style.width = '100%'; this.r.domElement.style.height = 'auto';
       this.cam.aspect = w / h; this.cam.updateProjectionMatrix(); this.pintar();
     }
