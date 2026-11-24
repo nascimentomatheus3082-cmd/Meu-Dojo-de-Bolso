@@ -49,18 +49,19 @@ export const salvarAcesso = (env, linha) => db(env, 'acessos?on_conflict=email',
   prefer: 'resolution=merge-duplicates,return=minimal',
 });
 
-/* ── Plano: o melhor produto pago vence. Anual inclui Família e Fichas. */
+/* ── Plano: o melhor produto pago vence. Anual inclui Kit, Fichas e Família. */
 export function calcularPlano(compras) {
   const tem = p => compras.some(c => c.produto === p);
   const plano = tem('anual') ? 'anual' : tem('completo') ? 'completo' : tem('essencial') ? 'essencial' : null;
   if (!plano) return null;
-  return { plano, familia: plano === 'anual' || tem('familia'), fichas: plano === 'anual' || tem('fichas') };
+  return { plano, familia: plano === 'anual' || tem('familia'), fichas: plano === 'anual' || tem('fichas'), kit: plano === 'anual' || tem('kit') };
 }
 
 /* Nome do produto na Cakto -> código interno */
 export function produtoDoNome(nome) {
   const n = String(nome || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (n.includes('upgrade') || n.includes('anual')) return 'anual';
+  if (n.includes('kit')) return 'kit';        // "Kit do Exame para Imprimir" (substituiu o Plano Família)
   if (n.includes('familia')) return 'familia';
   if (n.includes('ficha')) return 'fichas';
   if (n.includes('completo')) return 'completo';

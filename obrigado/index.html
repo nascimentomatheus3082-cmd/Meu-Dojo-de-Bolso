@@ -45,8 +45,9 @@
     <h2>Passe para o Anual e leve tudo junto</h2>
     <p>Como você acabou de comprar, o upgrade sai pela diferença:</p>
     <ul>
-      <li>Plano Família: até 3 judocas no mesmo acesso</li>
+      <li>Kit do Exame para Imprimir: cartilha, cartões, calendário e checklist</li>
       <li>Fichas para imprimir de todas as técnicas</li>
+      <li>Plano Família: até 3 judocas no mesmo acesso</li>
       <li>Os módulos novos que lançarmos nos 12 meses</li>
     </ul>
     <p class="u-preco">+ R$ <span data-preco="upgradeAnual"></span></p>
@@ -70,26 +71,29 @@
 <script src="../assets/js/fx.js"></script>
 <script>
 /* A plataforma de pagamento redireciona para cá com os parâmetros do que foi comprado:
-   /obrigado/?plano=completo&familia=1&fichas=1&faixa=amarela  (ou ?plano=anual) */
+   /obrigado/?plano=completo&kit=1&fichas=1&faixa=amarela  (ou ?plano=anual)
+   &familia=1 continua valendo para quem comprou o antigo Plano Família. */
 (function () {
   const q = new URLSearchParams(location.search);
   const plano = ['essencial', 'completo', 'anual'].includes(q.get('plano')) ? q.get('plano') : 'completo';
   const faixa = FAIXAS.find(f => f.id === q.get('faixa'));
   const params = new URLSearchParams({ plano });
   if (faixa) params.set('faixa', faixa.id);
-  ['familia', 'fichas'].forEach(k => { if (q.get(k) === '1') params.set(k, '1'); });
+  ['kit', 'familia', 'fichas'].forEach(k => { if (q.get(k) === '1') params.set(k, '1'); });
   document.getElementById('abrirApp').href = '../app/?' + params.toString();
   const nomes = { essencial: 'Essencial' + (faixa ? ' · faixa ' + faixa.nome.toLowerCase() : ''), completo: 'Completo · todas as faixas', anual: 'Anual · tudo incluso' };
   const extras = [];
-  if (plano === 'anual' || q.get('familia') === '1') extras.push('Plano Família (3 judocas)');
+  if (plano === 'anual' || q.get('kit') === '1') extras.push('Kit do Exame para Imprimir');
   if (plano === 'anual' || q.get('fichas') === '1') extras.push('fichas para imprimir');
+  if (plano === 'anual' || q.get('familia') === '1') extras.push('Plano Família (3 judocas)');
+  const juntar = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' e ' + l[l.length - 1] : l.join('');
   document.getElementById('acessoTit').textContent = 'Plano ' + nomes[plano];
-  document.getElementById('acessoTxt').textContent = extras.length ? 'Inclui ' + extras.join(' e ') + '. Toque no botão para entrar.' : 'Toque no botão para entrar. Guarde este link ou o e-mail de acesso.';
+  document.getElementById('acessoTxt').textContent = extras.length ? 'Inclui ' + juntar(extras) + '. Toque no botão para entrar.' : 'Toque no botão para entrar. Guarde este link ou o e-mail de acesso.';
   if (CONFIG.acessoFechado) {
     // Acesso fechado: o plano vem da compra; aqui o cliente só cria a senha.
     document.getElementById('abrirApp').href = (CONFIG.dominio || '..') + '/app/#/primeiro-acesso';
     document.getElementById('abrirApp').textContent = 'Criar meu acesso';
-    document.getElementById('acessoTxt').innerHTML = 'Crie a sua senha com o <b>mesmo e-mail do pagamento</b> e os <b>4 últimos números do celular</b> que você informou na compra. Leva 30 segundos.' + (extras.length ? ' Inclui ' + extras.join(' e ') + '.' : '');
+    document.getElementById('acessoTxt').innerHTML = 'Crie a sua senha com o <b>mesmo e-mail do pagamento</b> e os <b>4 últimos números do celular</b> que você informou na compra. Leva 30 segundos.' + (extras.length ? ' Inclui ' + juntar(extras) + '.' : '');
     document.getElementById('okTexto').textContent = 'Se o Pix acabou de ser pago, espere 1 minuto antes de criar o acesso.';
   }
   document.querySelectorAll('[data-preco]').forEach(e => e.textContent = CONFIG.precos[e.dataset.preco]);
@@ -112,7 +116,7 @@
   if (CONFIG.suporteWhatsapp) document.getElementById('suporte').innerHTML = `Dúvida com o acesso? <a href="https://wa.me/${CONFIG.suporteWhatsapp}">Fale com o suporte no WhatsApp</a>`;
 
   // O evento Purchase é enviado pelo Pixel da plataforma de pagamento (evita contar a venda duas vezes).
-  track('ObrigadoVisto', { plano, familia: q.get('familia') === '1', fichas: q.get('fichas') === '1' }, true);
+  track('ObrigadoVisto', { plano, kit: q.get('kit') === '1', familia: q.get('familia') === '1', fichas: q.get('fichas') === '1' }, true);
   setTimeout(() => { FX.confete(120); FX.som('conquista'); }, 350);
 })();
 </script>

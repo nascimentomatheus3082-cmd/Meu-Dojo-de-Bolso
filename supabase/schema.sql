@@ -11,7 +11,7 @@ create table if not exists compras (
   email         text not null,
   telefone      text,                      -- só dígitos
   documento     text,                      -- CPF só dígitos
-  produto       text not null,             -- essencial | completo | anual | familia | fichas | outro
+  produto       text not null,             -- essencial | completo | anual | kit | fichas | familia (antigo) | outro
   produto_nome  text,
   valor         numeric,
   status        text not null,             -- pago | cancelado

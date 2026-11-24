@@ -20,6 +20,7 @@ const perfis = () => raw.get('perfis', []);
 const perfilAtual = () => perfis().find(p => p.id === raw.get('perfilAtual')) || perfis()[0] || null;
 const limitePerfis = () => (raw.get('familia', false) || raw.get('plano') === 'anual') ? 3 : 1;
 const temFichas = () => raw.get('fichas', false) || raw.get('plano') === 'anual';
+const temKit = () => raw.get('kit', false) || raw.get('plano') === 'anual';
 function salvarPerfis(lista) { raw.set('perfis', lista); }
 function criarPerfil(nome, faixa) {
   const lista = perfis();
@@ -36,7 +37,7 @@ function apagarPerfil(id) {
 }
 
 /* Acesso pelo link de entrega:
-   /app/?plano=completo | ?plano=essencial&faixa=verde | acrescente &familia=1 para o Plano Família */
+   /app/?plano=completo | ?plano=essencial&faixa=verde | acrescente &kit=1 (Kit do Exame), &fichas=1 ou &familia=1 (antigo Plano Família) */
 (function acesso() {
   const q = new URLSearchParams(location.search);
   // Com o acesso fechado, o plano vem do servidor (login.js) e o link não libera nada.
@@ -44,6 +45,7 @@ function apagarPerfil(id) {
     if (q.get('plano')) raw.set('plano', q.get('plano'));
     if (q.get('familia') === '1') raw.set('familia', true);
     if (q.get('fichas') === '1') raw.set('fichas', true);
+    if (q.get('kit') === '1') raw.set('kit', true);
     if (q.get('faixa')) raw.set('faixaPlano', q.get('faixa'));
   }
   // quem usava o app antes dos perfis: os dados viram o perfil 1
@@ -192,6 +194,7 @@ function inicio() {
         ${tile('#/banca', 'banca', 'azul', 'Modo banca', 'O app pede, você mostra')}
         ${tile(`#/aulas/${f.id}?todas`, 'rev', 'roxo', 'Revisão', `${tecnicasAte(f.id).length - lista.length} das faixas anteriores`)}
         ${tile('#/glossario', 'termos', 'ouro', 'Termos', `${GLOSSARIO.length} palavras com pronúncia`)}
+        ${temKit() ? tile('../kit/', 'fichas', 'ouro', 'Kit do Exame', 'Cartilha, cartões e calendário') : ''}
         ${temFichas() ? tile('../fichas/', 'fichas', 'cinza', 'Fichas', 'Para imprimir em A4') : ''}
       </div>
     </section>

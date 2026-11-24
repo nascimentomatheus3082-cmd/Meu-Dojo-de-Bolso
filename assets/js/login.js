@@ -34,13 +34,13 @@ const Acesso = (function () {
 
   /* O plano confirmado pelo servidor vira o estado que o app já usa (dojo_plano, dojo_familia...) */
   function aplicar(a) {
-    ls.set('plano', a.plano); ls.set('familia', !!a.familia); ls.set('fichas', !!a.fichas);
+    ls.set('plano', a.plano); ls.set('familia', !!a.familia); ls.set('fichas', !!a.fichas); ls.set('kit', !!a.kit);
     if (a.faixaPlano) ls.set('faixaPlano', a.faixaPlano); else if (a.plano !== 'essencial') ls.del('faixaPlano');
     ls.set('email', a.email); ls.set('confirmadoEm', Date.now());
     liberado = true;
   }
   function sair(msg) {
-    ['token', 'confirmadoEm', 'plano', 'familia', 'fichas', 'faixaPlano'].forEach(ls.del);
+    ['token', 'confirmadoEm', 'plano', 'familia', 'fichas', 'kit', 'faixaPlano'].forEach(ls.del);
     liberado = false;
     tela(msg);
   }

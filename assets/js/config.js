@@ -17,14 +17,14 @@ const CONFIG = {
     'upgrade-anual': 'https://pay.cakto.com.br/dkodhwa_1347659', // Upsell da página de obrigado (R$ 24,90)
 
     // ── Opcional: um link por combinação de order bumps.
-    // Se você cadastrar o Plano Família e as Fichas como order bump DENTRO da Cakto,
+    // Se você cadastrar o Kit do Exame e as Fichas como order bump DENTRO da Cakto,
     // deixe estes vazios: o cliente vai para o link do plano e marca os bumps no checkout.
-    'essencial+familia':        '',
-    'essencial+fichas':         '',
-    'essencial+familia+fichas': '',
-    'completo+familia':         '',
-    'completo+fichas':          '',
-    'completo+familia+fichas':  '',
+    'essencial+kit':        '',
+    'essencial+fichas':     '',
+    'essencial+kit+fichas': '',
+    'completo+kit':         '',
+    'completo+fichas':      '',
+    'completo+kit+fichas':  '',
   },
 
   // ── 2. PIXEL DA META ──────────────────────────────────────────────
@@ -37,7 +37,7 @@ const CONFIG = {
 
   // ── 4. PREÇOS EXIBIDOS NO SITE ────────────────────────────────────
   // Precisam bater com os preços cadastrados na Cakto.
-  precos: { essencial: '17,90', completo: '27,90', anual: '49,90', anualMes: '4,99', familia: '9,90', fichas: '7,90', upgradeAnual: '24,90' },
+  precos: { essencial: '17,90', completo: '27,90', anual: '49,90', anualMes: '4,99', kit: '9,90', fichas: '7,90', upgradeAnual: '24,90' },
   garantiaDias: 7,
 
   // ── 5. ACESSO FECHADO (login) ─────────────────────────────────────
