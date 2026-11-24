@@ -43,7 +43,7 @@ const CONFIG = {
   // ── 5. ACESSO FECHADO (login) ─────────────────────────────────────
   // true: o app só abre com e-mail e senha de quem comprou (o plano vem da compra na Cakto).
   // Só ligue depois de configurar o Supabase e as variáveis na Cloudflare (ACESSO-FECHADO.md).
-  acessoFechado: false,
+  acessoFechado: true,
   dominio: 'https://meudojodebolso.com',
 };
 
