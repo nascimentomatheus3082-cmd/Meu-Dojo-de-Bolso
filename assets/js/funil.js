@@ -91,7 +91,7 @@ function desafio() {
   $('#desafioPasso').textContent = `Pergunta ${PERGUNTAS.length + 1} de ${PERGUNTAS.length + 1} · desafio rápido`;
   $('#desafioTitulo').textContent = 'Este golpe cai no exame da faixa ' + fx().nome.toLowerCase() + '. Qual é?';
   $('#desafioStage').innerHTML = '';
-  desafioStage = new JudoStage($('#desafioStage'), { spec: certa.a, belt: '#F4F5F2' });
+  desafioStage = new JudoStage($('#desafioStage'), { spec: certa.a, belt: '#F4F5F2', d3: true });
   desafioStage.playAll(true);
   $('#desafioOpcoes').innerHTML = ops.map(o => `<button class="opcao" data-id="${o.id}"><span class="emo" aria-hidden="true">🥋</span><span>${o.n}</span></button>`).join('');
   $('#desafioFb').hidden = true;
@@ -227,4 +227,4 @@ function embaralhar(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math
 
 /* ── Início */
 // O topo do quiz agora é o vídeo 3D (assets/video/golpe-3d.mp4); pausa quando o quiz começa.
-$$('[data-go="quem"]').forEach(b => b.onclick = () => { const v = $('#heroVideo'); if (v) v.pause(); track('ViewContent', { content_name: 'quiz_inicio' }); mostrarPergunta(0); });
+$$('[data-go="quem"]').forEach(b => b.onclick = () => { const v = $('#heroVideo'); if (v) v.pause(); if (window.Judo3D) Judo3D.preCarregar(); track('ViewContent', { content_name: 'quiz_inicio' }); mostrarPergunta(0); });

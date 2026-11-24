@@ -480,7 +480,7 @@ function prova(qs, cfg, f) {
       ${q.anim ? '<div class="stage q-stage" id="qStage"></div>' : ''}
       <div class="q-ops">${q.o.map((o, k) => `<button class="q-op" data-k="${k}"><i>${'abcd'[k]}</i><span>${esc(o)}</span></button>`).join('')}</div>
       <div id="qFim"></div>`;
-    if (q.anim) { stage = new JudoStage($('#qStage'), { spec: q.anim, belt: '#F4F5F2' }); stage.playAll(true); }
+    if (q.anim) { stage = new JudoStage($('#qStage'), { spec: q.anim, belt: '#F4F5F2', d3: true }); stage.playAll(true); }
     $$('.q-op').forEach(b => b.onclick = () => {
       if (resp[i] !== null) return;
       const k = +b.dataset.k; resp[i] = k;
@@ -565,7 +565,7 @@ function banca() {
     const r = $('#revela'); if (!r || r.dataset.ok) return; r.dataset.ok = 1;
     $('#timer').textContent = '✓';
     r.innerHTML = `<div class="aula"><div class="stage"></div><div class="caption"><span class="cap-fase">${esc(t.tr)}</span><span class="cap-txt">${esc(t.p[2])}</span></div><a class="btn ghost" href="#/aula/${t.id}">Ver a aula completa</a></div>`;
-    stage = new JudoStage(r.querySelector('.stage'), { spec: t.a, belt: f.cor }); stage.playAll(true);
+    stage = new JudoStage(r.querySelector('.stage'), { spec: t.a, belt: f.cor, d3: true }); stage.playAll(true);
   };
   render();
 }

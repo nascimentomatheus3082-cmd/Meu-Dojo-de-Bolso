@@ -263,6 +263,12 @@ class JudoStage {
   constructor(container, opts = {}) {
     this.svg = el('svg', { viewBox: '0 18 300 172', class: 'stage-svg', role: 'img', 'aria-label': 'Animação do golpe' });
     container.appendChild(this.svg);
+    this.container = container; this.opts = opts;
+    // 3D (anim3d.js): quando pedido (opts.d3), troca o desenho 2D pelo palco 3D assim que o Three.js estiver pronto.
+    if (opts.d3 && window.Judo3D) {
+      if (Judo3D.ok()) setTimeout(() => this.usar3D(), 0);
+      else Judo3D.carregar().then(ok => { if (ok) this.usar3D(); });
+    }
     const defs = el('defs', {}, this.svg);
     const m = el('marker', { id: 'ah' + Math.random().toString(36).slice(2, 7), viewBox: '0 0 10 10', refX: 5, refY: 5, markerWidth: 4, markerHeight: 4, orient: 'auto-start-reverse' }, defs);
     el('path', { d: 'M0,0 L10,5 L0,10 z', fill: 'var(--hinomaru, #D0312D)' }, m);
@@ -279,8 +285,17 @@ class JudoStage {
     this.speed = 1; this.mirror = false; this.token = 0;
     this.load(opts.spec || 'koshi');
   }
-  setBelt(c) { this.tori.belt.setAttribute('stroke', c); this.tori.tail.setAttribute('stroke', c); }
-  setMirror(on) { this.mirror = on; this.world.setAttribute('transform', on ? 'translate(300,0) scale(-1,1)' : ''); this.arrowTxt.setAttribute('transform', ''); }
+  usar3D() {
+    if (this.r3d || this.morto || !this.svg.isConnected) return;
+    try { this.r3d = Judo3D.criar(this.container, { belt: this.opts.belt }); }
+    catch (e) { this.r3d = null; return; } // sem WebGL de verdade: fica no 2D
+    this.svg.remove();
+    if (this.mirror) this.r3d.setMirror(true);
+    this.render();
+  }
+  destruir() { this.morto = true; this.token++; if (this.r3d) this.r3d.dispose(); }
+  setBelt(c) { this.tori.belt.setAttribute('stroke', c); this.tori.tail.setAttribute('stroke', c); if (this.r3d) this.r3d.setBelt(c); }
+  setMirror(on) { this.mirror = on; this.world.setAttribute('transform', on ? 'translate(300,0) scale(-1,1)' : ''); this.arrowTxt.setAttribute('transform', ''); if (this.r3d) this.r3d.setMirror(on); }
   load(spec) {
     const ground = /^(ground|kan|shime)/.test(spec || '');
     this.world.appendChild(ground ? this.uke.g : this.tori.g);
@@ -300,6 +315,7 @@ class JudoStage {
       this.arrowTxt.setAttribute('x', Math.min(x1, x2) + 2); this.arrowTxt.setAttribute('y', y1 - 18);
       this.arrowTxt.setAttribute('opacity', this.mirror ? 0 : a.o);
     } else { this.arrow.setAttribute('opacity', 0); this.arrowTxt.setAttribute('opacity', 0); }
+    if (this.r3d) this.r3d.draw(this.cur.T, this.cur.U, this.cur.arrow);
   }
   reset() { this.token++; this.cur = { T: this.frames[0].T, U: this.frames[0].U, arrow: null }; this.render(); }
   stop() { this.token++; }
@@ -378,7 +394,7 @@ const Voz = {
 class AulaPlayer {
   constructor(root, tec, opts = {}) {
     this.root = root; this.tec = tec; this.opts = opts;
-    this.stage = new JudoStage(root.querySelector('.stage'), { spec: tec.a, belt: opts.belt });
+    this.stage = new JudoStage(root.querySelector('.stage'), { spec: tec.a, belt: opts.belt, d3: opts.d3 !== false });
     this.cap = root.querySelector('.caption');
     this.playing = false; this.run = 0;
   }
